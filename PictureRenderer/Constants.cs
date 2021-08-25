@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PictureRenderer
+{
+	public enum LazyLoading
+    {
+        None,
+        Native,
+        //Progressive,
+    }
+
+    public static class ImageFormat
+    {
+        public static string Webp => "webp";
+    }
+}
