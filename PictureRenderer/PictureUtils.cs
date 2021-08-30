@@ -47,7 +47,7 @@ namespace PictureRenderer
             return pData;
         }
 
-        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int? imageWidth, string originalFormat, string wantedFormat = "")
+        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string originalFormat, string wantedFormat = "")
         {
             var queryItems = HttpUtility.ParseQueryString(uri.Query);
 
@@ -59,23 +59,28 @@ namespace PictureRenderer
 
             queryItems.Add("width", imageWidth.ToString());
 
-            //if (imageType.HeightRatio > 0)
-            //{
-            //    if (!currentQueryKeys.Contains("mode")) //don't change mode value if it already exists
-            //    {
-            //        qc.Add("mode", "crop");
-            //    }
-            //    qc.Add("heightratio", imageType.HeightRatio.ToString(CultureInfo.InvariantCulture));
-            //}
-
+            queryItems = AddHeightQuery(imageWidth, queryItems, profile);
+            
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
             return uri.AbsolutePath + "?" + queryItems.ToString();
         }
 
+        private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
+        {
+            //Add height if aspect ratio is set, and height is not already in the querystring.
+            if (profile.AspectRatio > 0 && queryItems["height"] == null)
+            {
+                queryItems.Add("height", Convert.ToInt32(imageWidth / profile.AspectRatio).ToString()); 
+            }
+
+            return queryItems;
+        }
+
         private static NameValueCollection AddQualityQuery(NameValueCollection queryItems, PictureProfileBase profile)
         {
+            //TODO: Ignore quality for png etc
             if (queryItems["quality"] == null)
             {
                 if (profile.Quality != null)

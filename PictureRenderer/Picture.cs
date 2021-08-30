@@ -9,6 +9,7 @@ namespace PictureRenderer
     {
         public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Native)
         {
+            //TODO: lazy loading
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText);
             var imgElement = RenderImgElement(pictureData, profile);
             var sourceElement = RenderSourceElement(pictureData);
