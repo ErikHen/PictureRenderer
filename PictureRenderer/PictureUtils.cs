@@ -67,7 +67,7 @@ namespace PictureRenderer
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
-            return uri.AbsolutePath + "?" + string.Join("&", queryItems.AllKeys.Select(a => a + "=" + queryItems[a])); //queryItems.ToString();
+            return uri.AbsolutePath + "?" + queryItems.ToString(); //string.Join("&", queryItems.AllKeys.Select(a => a + "=" + queryItems[a])); //
         }
         private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
         {
@@ -114,14 +114,14 @@ namespace PictureRenderer
 
         private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat = "")
         {
-            var srcset = string.Empty;
+            var srcSet = string.Empty;
             foreach (var width in profile.SrcSetWidths)
             {
-                srcset += BuildQueryString(imageUrl, profile, width, wantedFormat) + " " + width + "w, ";
+                srcSet += BuildQueryString(imageUrl, profile, width, wantedFormat) + " " + width + "w, ";
             }
-            srcset = srcset.TrimEnd(',', ' ');
+            srcSet = srcSet.TrimEnd(',', ' ');
 
-            return srcset;
+            return srcSet;
         }
 
         private static string GetFormatFromExtension(string filePath)
