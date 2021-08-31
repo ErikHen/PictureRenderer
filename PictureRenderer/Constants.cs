@@ -7,7 +7,7 @@ namespace PictureRenderer
 	public enum LazyLoading
     {
         None,
-        Native,
+        Browser,
         //Progressive,
     }
 

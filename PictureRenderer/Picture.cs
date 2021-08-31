@@ -14,19 +14,18 @@ namespace PictureRenderer
 
         public static string Render(string imagePath, PictureProfileBase profile, (double x, double y) focalPoint)
         {
-            return Render(imagePath, profile, string.Empty, LazyLoading.Native, focalPoint);
+            return Render(imagePath, profile, string.Empty, LazyLoading.Browser, focalPoint);
         }
 
         public static string Render(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
         {
-            return Render(imagePath, profile, altText, LazyLoading.Native, focalPoint);
+            return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoint);
         }
 
-        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Native, (double x, double y) focalPoint = default)
+        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default)
         {
-            //TODO: lazy loading
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint);
-            var imgElement = RenderImgElement(pictureData, profile);
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
             var sourceElement = RenderSourceElement(pictureData);
 
             var sourceElementWebp = string.Empty;
@@ -39,9 +38,10 @@ namespace PictureRenderer
             return $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>";
         }
 
-        private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile)
+        private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
-            return $"<img alt=\"{pictureData.AltText}\" src=\"{pictureData.ImgSrc}\" />";
+            var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
+            return $"<img alt=\"{pictureData.AltText}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute} />";
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")

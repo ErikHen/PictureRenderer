@@ -16,7 +16,7 @@ namespace PictureRenderer
         {
             if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
             {
-                imagePath = "http://dummy.com" + imagePath;
+                imagePath = "http://dummy.com" + imagePath; //to be able to use the Uri object.
                 if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
                 {
                     throw new Exception("Image url not well formatted.");
