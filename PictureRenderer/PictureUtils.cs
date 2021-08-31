@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Web;
 using PictureRenderer.Profiles;
@@ -11,7 +12,7 @@ namespace PictureRenderer
 {
     internal static class PictureUtils
     {
-        public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText)
+        public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
         {
             if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
             {
@@ -28,26 +29,26 @@ namespace PictureRenderer
             var pData = new PictureData
             {
                 AltText = altText,
-                ImgSrc = BuildQueryString(uri, profile, profile.DefaultWidth, originalFormat)
+                ImgSrc = BuildQueryString(uri, profile, profile.DefaultWidth, string.Empty, focalPoint)
             };
 
 
             if (profile.SrcSetWidths != null)
             {
-                pData.SrcSet = BuildSrcSet(uri, profile, originalFormat);
+                pData.SrcSet = BuildSrcSet(uri, profile);
                 pData.SizesAttribute = string.Join(", ", profile.SrcSetSizes);
 
                 //Add webp versions.
                 if (profile.IncludeWebp && originalFormat == "jpg")
                 {
-                    pData.SrcSetWebp = BuildSrcSet(uri, profile, originalFormat, "webp");
+                    //TODO pData.SrcSetWebp = BuildSrcSet(uri, profile, "webp");
                 }
             }
 
             return pData;
         }
 
-        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string originalFormat, string wantedFormat = "")
+        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint = default)
         {
             var queryItems = HttpUtility.ParseQueryString(uri.Query);
 
@@ -60,11 +61,22 @@ namespace PictureRenderer
             queryItems.Add("width", imageWidth.ToString());
 
             queryItems = AddHeightQuery(imageWidth, queryItems, profile);
+
+            queryItems = AddFocalPointQuery(focalPoint, queryItems);
             
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
-            return uri.AbsolutePath + "?" + queryItems.ToString();
+            return uri.AbsolutePath + "?" + string.Join("&", queryItems.AllKeys.Select(a => a + "=" + queryItems[a])); //queryItems.ToString();
+        }
+        private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
+        {
+            if ((focalPoint.x > 0 || focalPoint.y > 0)&& queryItems["rxy"] == null)
+            {
+                queryItems.Add("rxy", $"{focalPoint.x.ToString(CultureInfo.InvariantCulture)},{focalPoint.y.ToString(CultureInfo.InvariantCulture)}");
+            }
+
+            return queryItems;
         }
 
         private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
@@ -100,12 +112,12 @@ namespace PictureRenderer
             return queryItems;
         }
 
-        private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string originalFormat, string wantedFormat = "")
+        private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat = "")
         {
             var srcset = string.Empty;
             foreach (var width in profile.SrcSetWidths)
             {
-                srcset += BuildQueryString(imageUrl, profile, width, originalFormat, wantedFormat) + " " + width + "w, ";
+                srcset += BuildQueryString(imageUrl, profile, width, wantedFormat) + " " + width + "w, ";
             }
             srcset = srcset.TrimEnd(',', ' ');
 

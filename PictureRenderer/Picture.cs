@@ -7,10 +7,25 @@ namespace PictureRenderer
 {
     public static class Picture
     {
-        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Native)
+        public static string Render(string imagePath, PictureProfileBase profile, LazyLoading lazyLoading)
+        {
+            return Render(imagePath, profile, string.Empty, lazyLoading);
+        }
+
+        public static string Render(string imagePath, PictureProfileBase profile, (double x, double y) focalPoint)
+        {
+            return Render(imagePath, profile, string.Empty, LazyLoading.Native, focalPoint);
+        }
+
+        public static string Render(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
+        {
+            return Render(imagePath, profile, altText, LazyLoading.Native, focalPoint);
+        }
+
+        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Native, (double x, double y) focalPoint = default)
         {
             //TODO: lazy loading
-            var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText);
+            var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint);
             var imgElement = RenderImgElement(pictureData, profile);
             var sourceElement = RenderSourceElement(pictureData);
 
