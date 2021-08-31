@@ -15,6 +15,7 @@ From nearly done to possible that it will be done:
 * Create PictureRenderer.Optimizely to simplify usage together with Optimizely CMS even more.
 * Create PictureRenderer.Umbraco to simplify usage together with Umbraco CMS even more.
 * Add WebP support as soon as ImageSharp.Web supports it.
+* Add automated testing.
 * Add more samples, more CMS sample usage.
 * Add support for Contentful image resizer.
 * Add support for ImageProcessor.Web to support ASP.Net Framework.
