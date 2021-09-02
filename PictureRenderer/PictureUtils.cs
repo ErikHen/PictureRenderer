@@ -35,7 +35,7 @@ namespace PictureRenderer
 
             if (profile.SrcSetWidths != null)
             {
-                pData.SrcSet = BuildSrcSet(uri, profile);
+                pData.SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint);
                 pData.SizesAttribute = string.Join(", ", profile.SrcSetSizes);
 
                 //Add webp versions.
@@ -48,7 +48,7 @@ namespace PictureRenderer
             return pData;
         }
 
-        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint = default)
+        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
             var queryItems = HttpUtility.ParseQueryString(uri.Query);
 
@@ -73,7 +73,9 @@ namespace PictureRenderer
         {
             if ((focalPoint.x > 0 || focalPoint.y > 0)&& queryItems["rxy"] == null)
             {
-                queryItems.Add("rxy", $"{focalPoint.x.ToString(CultureInfo.InvariantCulture)},{focalPoint.y.ToString(CultureInfo.InvariantCulture)}");
+                var x = Math.Round(focalPoint.x, 3).ToString(CultureInfo.InvariantCulture);
+                var y = Math.Round(focalPoint.y, 3).ToString(CultureInfo.InvariantCulture);
+                queryItems.Add("rxy", $"{x},{y}");
             }
 
             return queryItems;
@@ -112,12 +114,12 @@ namespace PictureRenderer
             return queryItems;
         }
 
-        private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat = "")
+        private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat, (double x, double y) focalPoint)
         {
             var srcSet = string.Empty;
             foreach (var width in profile.SrcSetWidths)
             {
-                srcSet += BuildQueryString(imageUrl, profile, width, wantedFormat) + " " + width + "w, ";
+                srcSet += BuildQueryString(imageUrl, profile, width, wantedFormat, focalPoint) + " " + width + "w, ";
             }
             srcSet = srcSet.TrimEnd(',', ' ');
 
