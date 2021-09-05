@@ -29,7 +29,7 @@ namespace PictureRenderer
             var pData = new PictureData
             {
                 AltText = altText,
-                ImgSrc = BuildQueryString(uri, profile, profile.DefaultWidth, string.Empty, focalPoint)
+                ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint)
             };
 
 
