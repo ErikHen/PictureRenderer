@@ -20,7 +20,7 @@ The content editor doesn't have to care about what aspect ratio, or size, the im
 ## How to use
 *More instructions will be added...*
 
-* Add [ImageSharp.Web nuget](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution on the server that will take care of the actual resizing of the images.
+* Add [ImageSharp.Web nuget](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution on the server that will take care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
 * Add [PictureRenderer nuget](https://www.nuget.org/packages/PictureRenderer/) to the solution that renders the HTML.
 * Create Picture profiles for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
 You could for example create Picture profiles for: “Top hero image”, “Teaser image”, “Image gallery thumbnail”.
@@ -58,26 +58,35 @@ Render the picture element by calling `Picture.Render`
 * **lazyLoading (optional)** - Type of lazy loading. Currently only [browser native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) (or none).
 * **focalPoint (optional)** - Use a focal point when image is cropped. *More description will be added*
 
-Picture.Render returns a string, so you need to make sure the string is not HTML-escaped byt using Html.Raw or similar.
-<br> *Sample code for proper Html helper will be added*
+Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar.
+<br> *Sample code for "proper" Html helper will be added*
 
 Basic MVC/Razor page sample
 ```
 @Html.Raw(Picture.Render("/img/test.jpg", PictureProfiles.SampleImage)) 
 ```
+<br>
+
+Basic Blazor sample
+```
+@((MarkupString)Picture.Render("/images/test.jpg", PictureProfiles.SampleImage))
+```
 
 <br>
-<br>
+
+See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
+<br><br>
 
 ## Current status
-Preview/beta mode.
+First version is released.
 
 ## Roadmap
 From nearly done, to may possibly be done:
-* Finish v1 (encode alt text), add instructions how to use, publish repo with sample projects.
+* ~~Finish v1.0, add basic instructions how to use, publish repo with sample projects.~~
 * Create PictureRenderer.Optimizely to simplify usage together with Optimizely CMS even more.
 * Create PictureRenderer.Umbraco to simplify usage together with Umbraco CMS even more.
-* Add WebP support as soon as ImageSharp.Web supports it.
+* Document sample projects a bit more.
+* Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
 * Add automated testing.
 * Add more samples, more CMS sample usage.
 * Add support for Contentful image resizer.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using PictureRenderer.Profiles;
 
 namespace PictureRenderer
@@ -41,7 +42,7 @@ namespace PictureRenderer
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
-            return $"<img alt=\"{pictureData.AltText}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute} />";
+            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute} />";
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")
