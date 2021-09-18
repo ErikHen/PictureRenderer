@@ -81,10 +81,9 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 First version is released.
 
 ## Roadmap
-From nearly done, to may possibly be done:
 * ~~Finish v1.0, add basic instructions how to use, publish repo with sample projects.~~
 * Create PictureRenderer.Optimizely to simplify usage together with Optimizely CMS even more.
-* Create PictureRenderer.Umbraco to simplify usage together with Umbraco CMS even more.
+* ~~Create [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco) to simplify usage together with Umbraco CMS even more.~~
 * Document sample projects a bit more.
 * Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
 * Add automated testing.
