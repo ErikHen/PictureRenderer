@@ -36,14 +36,14 @@ public static class PictureProfiles
         new()
         {
             SrcSetWidths = new[] { 375, 750, 980, 1500 },
-            SrcSetSizes = new[] { "(max-width: 980px) calc((100vw - 40px))", "(max-width: 1200px) 368px", "750px" },
+            Sizes = new[] { "(max-width: 980px) calc((100vw - 40px))", "(max-width: 1200px) 368px", "750px" },
             AspectRatio = 1.777 
         };
 }
 ```
 
 * **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute.
-* **SrcSetSizes** – Allows us to define the size the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
+* **Sizes** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats.
 * **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest SrcSetWidth if not set.
@@ -77,12 +77,14 @@ Basic Blazor sample
 See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
-## Current status
-First version is released.
+## Version history
+**1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
+**1.2.1** Bugfix (unit tests would have found this issue... lesson learned)<br>
+<br>
 
 ## Roadmap
 - [x] Finish v1.0, add basic instructions how to use, publish repo with sample projects.
-- [ ] Create PictureRenderer.Optimizely to simplify usage together with Optimizely CMS even more.
+- [ ] Create [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer.Optimizely) to simplify usage together with Optimizely CMS even more.
 - [x] Create [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco) to simplify usage together with Umbraco CMS even more.
 - [ ] Document sample projects a bit more.
 - [ ] Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).

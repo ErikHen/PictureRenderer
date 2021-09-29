@@ -36,7 +36,7 @@ namespace PictureRenderer
             if (profile.SrcSetWidths != null)
             {
                 pData.SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint);
-                pData.SizesAttribute = string.Join(", ", profile.SrcSetSizes);
+                pData.SizesAttribute = string.Join(", ", profile.Sizes);
 
                 //Add webp versions.
                 if (profile.IncludeWebp && originalFormat == "jpg")
