@@ -20,11 +20,11 @@ The content editor doesn't have to care about what aspect ratio, or size, the im
 ## How to use
 *More instructions will be added...*
 
-* Add [ImageSharp.Web nuget](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution on the server that will take care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
-* Add [PictureRenderer nuget](https://www.nuget.org/packages/PictureRenderer/) to the solution that renders the HTML.
+* Add [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution on the server that will take care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
+* Add [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) to the solution that renders the HTML.
 * Create Picture profiles for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
 You could for example create Picture profiles for: “Top hero image”, “Teaser image”, “Image gallery thumbnail”.
-* Let Picture Renderer create the picture HTML element. *Sample code will be added*
+* Let Picture Renderer create the picture HTML element.
 
 ### Picture profile
 ```

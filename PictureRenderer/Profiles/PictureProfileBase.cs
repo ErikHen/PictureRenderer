@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace PictureRenderer.Profiles
 {
@@ -7,7 +8,9 @@ namespace PictureRenderer.Profiles
         private int _fallBackWidth;
 
         public int[] SrcSetWidths { get; set; }
+        [Obsolete("Use Sizes instead.")]
         public string[] SrcSetSizes { get; set; }
+        public string[] Sizes { get; set; }
         public int? Quality { get; set; }
         public bool IncludeWebp { get; } //always false until ImageSharp has support for Webp.
 
