@@ -21,8 +21,6 @@ The Picture Renderer works very well together with a CMS where you might not be 
 The content editor doesn't have to care about what aspect ratio, or size, the image has. The most optimal image will always be used.    
 
 ## How to use
-*More instructions will be added...*
-
 * Add [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution for the server that will take care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
 * Add [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) to the solution that renders the HTML (which may of course be the same as the solution that does the image resizing).
 * Create Picture profiles for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
@@ -30,7 +28,7 @@ You could for example create Picture profiles for: “Top hero image”, “Teas
 * Let Picture Renderer create the picture HTML element.
 
 ### Picture profile
-```
+```c#
 using PictureRenderer.Profiles;
 
 public static class PictureProfiles
@@ -53,7 +51,7 @@ public static class PictureProfiles
 
 ### Render picture element
 Render the picture element by calling `Picture.Render`
-<br><br>
+<br>
 #### Parameters
 * **ImagePath** - Image path and filename.
 * **profile** - The Picture profile that specifies image widths, etc..
@@ -62,7 +60,7 @@ Render the picture element by calling `Picture.Render`
 * **focalPoint (optional)** - Use a focal point when image is cropped. *More description will be added*
 
 Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar.
-<br> *Sample code for "proper" Html helper will be added*
+<br> *Sample code for Html helper will be added*
 
 Basic MVC/Razor page sample
 ```
@@ -81,8 +79,8 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
-**1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
 **1.2.2** Bugfix (unit tests would have found this issue... lesson learned)<br>
+**1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
 <br>
 
 ## Roadmap
@@ -93,6 +91,6 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 - [ ] Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
 - [ ] Handle both absolute and relative URIs. Currently always returns a relative URI.
 - [ ] Add automated testing.
-- [ ] Add more samples, more CMS sample usage.
+- [x] Add more samples, more CMS sample usage.
 - [ ] Add support for Contentful image resizer.
 - [ ] Add support for ImageProcessor.Web to support ASP.Net Framework.
