@@ -36,12 +36,13 @@ namespace PictureRenderer
             if (profile.SrcSetWidths != null)
             {
                 pData.SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint);
-                pData.SizesAttribute = string.Join(", ", profile.Sizes ?? profile.SrcSetSizes);
+                pData.SizesAttribute = string.Join(", ", profile.Sizes);
 
-                //Add webp versions.
-                if (profile.IncludeWebp && originalFormat == "jpg")
+                
+                if (profile.CreateWebpForFormat != null && profile.CreateWebpForFormat.Contains(originalFormat))
                 {
-                    //TODO pData.SrcSetWebp = BuildSrcSet(uri, profile, "webp");
+                    //Add webp versions.
+                    pData.SrcSetWebp = BuildSrcSet(uri, profile, ImageFormat.Webp, focalPoint);
                 }
             }
 
@@ -69,9 +70,10 @@ namespace PictureRenderer
 
             return uri.AbsolutePath + "?" + queryItems.ToString(); //string.Join("&", queryItems.AllKeys.Select(a => a + "=" + queryItems[a])); //
         }
+
         private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
         {
-            if ((focalPoint.x > 0 || focalPoint.y > 0)&& queryItems["rxy"] == null)
+            if ((focalPoint.x > 0 || focalPoint.y > 0) && queryItems["rxy"] == null)
             {
                 var x = Math.Round(focalPoint.x, 3).ToString(CultureInfo.InvariantCulture);
                 var y = Math.Round(focalPoint.y, 3).ToString(CultureInfo.InvariantCulture);
@@ -131,7 +133,7 @@ namespace PictureRenderer
             var extension = Path.GetExtension(filePath);
             var format = extension?.TrimStart('.');
             if (format == "jpeg")
-                format = "jpg";
+                format = ImageFormat.Jpeg;
             return format ?? string.Empty;
         }
     }

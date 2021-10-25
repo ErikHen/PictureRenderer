@@ -8,11 +8,9 @@ namespace PictureRenderer.Profiles
         private int _fallBackWidth;
 
         public int[] SrcSetWidths { get; set; }
-        [Obsolete("Use Sizes instead.")]
-        public string[] SrcSetSizes { get; set; }
         public string[] Sizes { get; set; }
         public int? Quality { get; set; }
-        public bool IncludeWebp { get; } //always false until ImageSharp has support for Webp.
+        public string[] CreateWebpForFormat { get; set; } 
 
         public int FallbackWidth
         {
@@ -36,7 +34,7 @@ namespace PictureRenderer.Profiles
         protected PictureProfileBase()
         {
             Quality = 80;
-            IncludeWebp = false;
+            CreateWebpForFormat = new string[] {ImageFormat.Jpeg};
         }
     }
 }

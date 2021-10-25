@@ -42,7 +42,7 @@ namespace PictureRenderer
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
-            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute} />";
+            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute}/>";
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")
@@ -57,7 +57,7 @@ namespace PictureRenderer
             var srcSetAttribute = $"srcset=\"{srcSet}\"";
             var sizesAttribute = $"sizes=\"{pictureData.SizesAttribute}\"";
 
-            return $"<source {srcSetAttribute} {sizesAttribute} {formatAttribute} />";
+            return $"<source {srcSetAttribute} {sizesAttribute} {formatAttribute}/>";
         }
     }
 }
