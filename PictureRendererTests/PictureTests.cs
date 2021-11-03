@@ -46,5 +46,23 @@ namespace PictureRenderer.Tests
 
             Assert.Equal(expected, result);
         }
+
+        [Fact()]
+        public void RenderWithCssClass()
+        {
+            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" loading=\"lazy\"class=\"my-css-class\"/></picture>";
+
+            var profile = new ImageSharpProfile()
+            {
+                SrcSetWidths = new[] { 150, 300 },
+                Sizes = new[] { "150px" },
+                AspectRatio = 1
+            };
+
+
+            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text", "my-css-class");
+
+            Assert.Equal(expected, result);
+        }
     }
 }
