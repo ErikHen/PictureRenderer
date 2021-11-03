@@ -23,9 +23,14 @@ namespace PictureRenderer
             return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoint);
         }
 
-        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default)
+        public static string Render(string imagePath, PictureProfileBase profile, string altText, string cssClass)
         {
-            var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint);
+            return Render(imagePath, profile, altText, LazyLoading.Browser, cssClass: cssClass);
+        }
+
+        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
+        {
+            var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
             var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
             var sourceElement = RenderSourceElement(pictureData);
 
@@ -42,7 +47,8 @@ namespace PictureRenderer
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
-            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute}/>";
+            var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : "class=\"" + pictureData.CssClass + "\"";
+            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {loadingAttribute}{classAttribute}/>";
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")
