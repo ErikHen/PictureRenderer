@@ -12,7 +12,7 @@ namespace PictureRenderer
 {
     internal static class PictureUtils
     {
-        public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
+        public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
         {
             if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
             {
@@ -29,7 +29,8 @@ namespace PictureRenderer
             var pData = new PictureData
             {
                 AltText = altText,
-                ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint)
+                ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
+                CssClass = cssClass
             };
 
 
