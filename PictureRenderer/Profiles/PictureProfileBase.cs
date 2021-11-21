@@ -14,6 +14,9 @@ namespace PictureRenderer.Profiles
         public int? Quality { get; set; }
         public bool IncludeWebp { get; } //always false until ImageSharp has support for Webp.
 
+        /// <summary>
+        /// Image width for browsers without support for picture element. Will use the largest SrcSetWidth if not set.
+        /// </summary>
         public int FallbackWidth
         {
             get
@@ -33,10 +36,21 @@ namespace PictureRenderer.Profiles
         /// </summary>
         public double AspectRatio { get; set; }
 
+        /// <summary>
+        /// If true, width and height attributes will not be rendered on the img element.
+        /// </summary>
+        public bool NoImgWidthHeight { get; set; }
+
+        /// <summary>
+        /// Img element decoding attribute.
+        /// </summary>
+        public ImageDecoding ImageDecoding {get; set;}
+
         protected PictureProfileBase()
         {
             Quality = 80;
             IncludeWebp = false;
+            ImageDecoding = ImageDecoding.Async;
         }
     }
 }
