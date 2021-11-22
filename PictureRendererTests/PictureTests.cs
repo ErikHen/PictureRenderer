@@ -66,7 +66,7 @@ namespace PictureRenderer.Tests
         }
 
         [Fact()]
-        public void RenderWithWidthAndHeightAndDecoding()
+        public void RenderWithWidthAndHeightAndNoDecoding()
         {
             const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\"sizes=\"150px\"type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\"sizes=\"150px\"/><img alt=\"alt text\"src=\"/myImage.jpg?width=300&height=300&quality=80\"width=\"300\"height=\"300\"loading=\"lazy\"/></picture>";
 
