@@ -33,12 +33,34 @@ using PictureRenderer.Profiles;
 
 public static class PictureProfiles
 {
-    public static ImageSharpProfile SampleImage =
-        new()
+    // Sample image
+    // Up to 640 pixels viewport width, the picture width will be 100% of the viewport minus 40 pixels.
+    // Up to 1200 pixels viewport width, the picture width will be 320 pixels.
+    // On larger viewport width, the picture width will be 750 pixels.
+    // Note that picture width is not the same as image width (but it can be, on screens with a "device pixel ratio" of 1).
+    public static readonly ImageSharpProfile SampleImage = new() 
         {
-            SrcSetWidths = new[] { 375, 750, 980, 1500 },
-            Sizes = new[] { "(max-width: 980px) calc((100vw - 40px))", "(max-width: 1200px) 368px", "750px" },
-            AspectRatio = 1.777 
+            SrcSetWidths = new[] { 320, 640, 750, 1500 },
+            Sizes = new[] { "(max-width: 640px) 100vw", "(max-width: 1200px) 320px", "750px" },
+            AspectRatio = 1.777 // 16:9 = 16/9 = 1.777
+        };
+
+    // Top hero
+    // Picture width is always 100% of the viewport width.
+    public static readonly ImageSharpProfile TopHero = new()
+        {
+            SrcSetWidths = new[] { 1024, 1366, 1536, 1920 },
+            Sizes = new[] { "100vw" },
+            AspectRatio = 2
+        };
+
+    // Thumbnail
+    // Thumbnail is always 150px wide. But the browser may still select the 300px image for a high resolution screen (e.g. mobile or tablet screens).
+    public static readonly ImageSharpProfile Thumbnail = new()
+        {
+            SrcSetWidths = new[] { 150, 300 },
+            Sizes = new[] { "150px" },
+            AspectRatio = 1  //square image (equal height and width).
         };
 }
 ```
@@ -46,8 +68,10 @@ public static class PictureProfiles
 * **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute.
 * **Sizes** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
-* **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Deafult value: 80.
+* **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
 * **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest SrcSetWidth if not set.
+* **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
+* **ImgWidthHeight (optional)** - If true, `width` and `height` attributes will be rendered on the img element.
 
 ### Render picture element
 Render the picture element by calling `Picture.Render`
@@ -55,9 +79,10 @@ Render the picture element by calling `Picture.Render`
 #### Parameters
 * **ImagePath** - Image path and filename.
 * **profile** - The Picture profile that specifies image widths, etc..
-* **altText (optional)** - Img element alt attribute.
+* **altText (optional)** - Img element `alt` attribute.
 * **lazyLoading (optional)** - Type of lazy loading. Currently only [browser native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) (or none).
-* **focalPoint (optional)** - Use a focal point when image is cropped. *More description will be added*
+* **focalPoint (optional)** - Use a focal point when image is cropped. 
+* **cssClass (optional)** - Css class for img element. 
 
 Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar.
 <br> *Sample code for Html helper will be added*
@@ -79,6 +104,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
+**1.3** Added possibility to render `class`, `decoding`, and `width` + `height` attributes on the img element. <br>
 **1.2.2** Bugfix (unit tests would have found this issue... lesson learned)<br>
 **1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
 <br>
