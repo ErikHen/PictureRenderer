@@ -46,7 +46,7 @@ namespace PictureRenderer
 
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
-            var widthAndHeightAttributes = profile.NoImgWidthHeight ? string.Empty : $"width=\"{profile.FallbackWidth}\"height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\"";
+            var widthAndHeightAttributes = profile.ImgWidthHeight ? $"width=\"{profile.FallbackWidth}\"height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\"" : string.Empty;
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
             var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : $"class=\"{HttpUtility.HtmlEncode(pictureData.CssClass)}\"";
             var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\"";

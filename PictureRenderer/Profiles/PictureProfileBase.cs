@@ -37,9 +37,9 @@ namespace PictureRenderer.Profiles
         public double AspectRatio { get; set; }
 
         /// <summary>
-        /// If true, width and height attributes will not be rendered on the img element.
+        /// If true, width and height attributes will be rendered on the img element.
         /// </summary>
-        public bool NoImgWidthHeight { get; set; }
+        public bool ImgWidthHeight { get; set; }
 
         /// <summary>
         /// Img element decoding attribute.
