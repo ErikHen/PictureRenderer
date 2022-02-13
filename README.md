@@ -104,6 +104,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
+**2.0** Support for WebP format. Removed deprecated property. Added unit tests. <br>
 **1.3** Added possibility to render `class`, `decoding`, and `width` + `height` attributes on the img element. <br>
 **1.2.2** Bugfix (unit tests would have found this issue... lesson learned)<br>
 **1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
@@ -113,10 +114,10 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 - [x] Finish v1.0, add basic instructions how to use, publish repo with sample projects.
 - [x] Create [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer.Optimizely) to simplify usage together with Optimizely CMS.
 - [x] Create [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco) to simplify usage together with Umbraco CMS.
-- [ ] Document sample projects a bit more.
-- [ ] Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
+- [x] Document sample projects a bit more.
+- [x] Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
 - [ ] Handle both absolute and relative URIs. Currently always returns a relative URI.
-- [ ] Add automated testing.
+- [x] Add automated testing.
 - [x] Add more samples, more CMS sample usage.
-- [ ] Add support for Contentful image resizer.
-- [ ] Add support for ImageProcessor.Web to support ASP.Net Framework.
+- [ ] Add support for Contentful image resizer (if requested).
+- [ ] Add support for ImageProcessor.Web to support ASP.Net Framework (not likely to happen...).
