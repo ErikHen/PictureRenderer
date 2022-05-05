@@ -105,7 +105,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 
 ## Version history
 * **2.0** Support for WebP format. Removed deprecated property. Added unit tests. <br> 
-!!! Note that you need to use [preview version of ImageSharp.Web](https://www.myget.org/feed/sixlabors/package/nuget/SixLabors.ImageSharp.Web) for WebP support. !!!
+Note that you need to use ImageSharp.Web v2.0 or above for WebP support. 
 * **1.3** Added possibility to render `class`, `decoding`, and `width` + `height` attributes on the img element. <br>
 * **1.2.2** Bugfix (unit tests would have found this issue... lesson learned)<br>
 * **1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
