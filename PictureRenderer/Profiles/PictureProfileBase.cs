@@ -16,7 +16,7 @@ namespace PictureRenderer.Profiles
         public int? Quality { get; set; }
 
         /// <summary>
-        /// The different image formats that should be offered as webp versions.
+        /// The image formats that should be offered as webp versions.
         /// PictureRenderer.ImageFormat.Jpeg is added by default.
         /// </summary>
         public string[] CreateWebpForFormat { get; set; } 
