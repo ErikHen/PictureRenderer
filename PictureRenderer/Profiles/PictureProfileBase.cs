@@ -9,7 +9,16 @@ namespace PictureRenderer.Profiles
 
         public int[] SrcSetWidths { get; set; }
         public string[] Sizes { get; set; }
+
+        /// <summary>
+        /// Default value is 80.
+        /// </summary>
         public int? Quality { get; set; }
+
+        /// <summary>
+        /// The different image formats that should be offered as webp versions.
+        /// PictureRenderer.ImageFormat.Jpeg is added by default.
+        /// </summary>
         public string[] CreateWebpForFormat { get; set; } 
 
         /// <summary>

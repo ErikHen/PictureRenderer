@@ -15,6 +15,7 @@ namespace PictureRenderer
     {
         public static string Webp => "webp";
         public static string Jpeg => "jpg";
+        public static string Png => "png";
     }
 
     public enum ImageDecoding
