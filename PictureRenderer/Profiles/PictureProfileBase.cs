@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PictureRenderer.Profiles
@@ -9,6 +10,11 @@ namespace PictureRenderer.Profiles
 
         public int[] SrcSetWidths { get; set; }
         public string[] Sizes { get; set; }
+
+        /// <summary>
+        /// Use this when you want to show different images depending on media condition (for example different image for mobile sized screen and desktop sized screen).
+        /// </summary>
+        public MediaCondition[] MultiImageMediaConditions { get; set; }
 
         /// <summary>
         /// Default value is 80.
@@ -22,17 +28,24 @@ namespace PictureRenderer.Profiles
         public string[] CreateWebpForFormat { get; set; } 
 
         /// <summary>
-        /// Image width for browsers without support for picture element. Will use the largest SrcSetWidth if not set.
+        /// Image width for browsers without support for picture element. Will use the largest image if not set.
         /// </summary>
         public int FallbackWidth
         {
             get
             {
+                if (_fallBackWidth == default && MultiImageMediaConditions != null)
+                {
+                    return MultiImageMediaConditions.OrderByDescending(mcw => mcw.Width).FirstOrDefault()?.Width ?? default;
+                }
+
                 if (_fallBackWidth == default && SrcSetWidths != null)
                 {
                     return SrcSetWidths.Max();
                 }
+
                 return _fallBackWidth;
+
             }
             set => _fallBackWidth = value;
         }

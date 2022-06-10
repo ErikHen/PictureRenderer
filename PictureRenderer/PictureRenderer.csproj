@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MediaImage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="_Build\picture_icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

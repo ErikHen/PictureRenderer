@@ -8,6 +8,11 @@ namespace PictureRenderer
 {
     public static class Picture
     {
+        //public static string Render(IEnumerable<MediaImage> mediaImages, PictureProfileBase profile)
+        //{
+        //    return Render(imagePath, profile, string.Empty);
+        //}
+
         public static string Render(string imagePath, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             return Render(imagePath, profile, string.Empty, lazyLoading);
@@ -31,17 +36,30 @@ namespace PictureRenderer
         public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
         {
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
-            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+           
             var sourceElement = RenderSourceElement(pictureData);
-
             var sourceElementWebp = string.Empty;
             if (!string.IsNullOrEmpty(pictureData.SrcSetWebp))
             {
                 sourceElementWebp = RenderSourceElement(pictureData, ImageFormat.Webp);
             }
 
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+            
             //Webp source element must be rendered first. Browser selects the first version it supports.
             return $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>";
+        }
+
+        /// <summary>
+        /// Render multiple different images in the same picture element.
+        /// </summary>
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
+        {
+            var pictureData = PictureUtils.GetMultiImagePictureData(imagePaths, profile, altText, focalPoint, cssClass);
+            var sourceElements = RenderSourceElementsForMultiImage(pictureData);
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+
+            return $"<picture>{sourceElements}{imgElement}</picture>";
         }
 
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
@@ -67,6 +85,28 @@ namespace PictureRenderer
             var sizesAttribute = $"sizes=\"{pictureData.SizesAttribute}\"";
 
             return $"<source {srcSetAttribute}{sizesAttribute}{formatAttribute}/>";
+        }
+
+        private static string RenderSourceElementsForMultiImage(MediaImagesPictureData pictureData)
+        {
+            var sourceElements = string.Empty;
+            foreach (var mediaImage in pictureData.MediaImages)
+            {
+                var mediaAttribute = $"media=\"{mediaImage.MediaCondition}\"";
+
+                //add webp source element first
+                if (!string.IsNullOrEmpty(pictureData.SrcSetWebp))
+                {
+                    var srcSetWebpAttribute = $"srcset=\"{mediaImage.ImagePathWebp}\"";
+                    var formatAttribute = "type=\"image/webp\"";
+                    sourceElements += $"<source {mediaAttribute} {srcSetWebpAttribute} {formatAttribute}/>";
+                }
+
+                var srcSetAttribute = $"srcset=\"{mediaImage.ImagePath}\"";
+                sourceElements += $"<source {mediaAttribute} {srcSetAttribute}/>";
+            }
+
+            return sourceElements;
         }
     }
 }
