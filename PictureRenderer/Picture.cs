@@ -13,9 +13,19 @@ namespace PictureRenderer
             return Render(imagePath, profile, string.Empty, lazyLoading);
         }
 
+        public static string Render(string[] imagePaths, PictureProfileBase profile, LazyLoading lazyLoading)
+        {
+            return Render(imagePaths, profile, string.Empty, lazyLoading);
+        }
+
         public static string Render(string imagePath, PictureProfileBase profile, (double x, double y) focalPoint)
         {
             return Render(imagePath, profile, string.Empty, LazyLoading.Browser, focalPoint);
+        }
+
+        public static string Render(string[] imagePaths, PictureProfileBase profile, (double x, double y) focalPoint)
+        {
+            return Render(imagePaths, profile, string.Empty, LazyLoading.Browser, focalPoint);
         }
 
         public static string Render(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
@@ -23,25 +33,48 @@ namespace PictureRenderer
             return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoint);
         }
 
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
+        {
+            return Render(imagePaths, profile, altText, LazyLoading.Browser, focalPoint);
+        }
+
         public static string Render(string imagePath, PictureProfileBase profile, string altText, string cssClass)
         {
             return Render(imagePath, profile, altText, LazyLoading.Browser, cssClass: cssClass);
         }
 
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, string cssClass)
+        {
+            return Render(imagePaths, profile, altText, LazyLoading.Browser, cssClass: cssClass);
+        }
+
         public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
         {
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
-            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+           
             var sourceElement = RenderSourceElement(pictureData);
-
             var sourceElementWebp = string.Empty;
             if (!string.IsNullOrEmpty(pictureData.SrcSetWebp))
             {
                 sourceElementWebp = RenderSourceElement(pictureData, ImageFormat.Webp);
             }
 
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+            
             //Webp source element must be rendered first. Browser selects the first version it supports.
             return $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>";
+        }
+
+        /// <summary>
+        /// Render different images in the same picture element.
+        /// </summary>
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
+        {
+            var pictureData = PictureUtils.GetMultiImagePictureData(imagePaths, profile, altText, focalPoint, cssClass);
+            var sourceElements = RenderSourceElementsForMultiImage(pictureData);
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+
+            return $"<picture>{sourceElements}{imgElement}</picture>";
         }
 
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
@@ -67,6 +100,28 @@ namespace PictureRenderer
             var sizesAttribute = $"sizes=\"{pictureData.SizesAttribute}\"";
 
             return $"<source {srcSetAttribute}{sizesAttribute}{formatAttribute}/>";
+        }
+
+        private static string RenderSourceElementsForMultiImage(MediaImagesPictureData pictureData)
+        {
+            var sourceElements = string.Empty;
+            foreach (var mediaImage in pictureData.MediaImages)
+            {
+                var mediaAttribute = $"media=\"{mediaImage.MediaCondition}\"";
+
+                //add webp source element first
+                if (!string.IsNullOrEmpty(mediaImage.ImagePathWebp))
+                {
+                    var srcSetWebpAttribute = $"srcset=\"{mediaImage.ImagePathWebp}\"";
+                    var formatAttribute = "type=\"image/webp\"";
+                    sourceElements += $"<source {mediaAttribute} {srcSetWebpAttribute} {formatAttribute}/>";
+                }
+
+                var srcSetAttribute = $"srcset=\"{mediaImage.ImagePath}\"";
+                sourceElements += $"<source {mediaAttribute} {srcSetAttribute}/>";
+            }
+
+            return sourceElements;
         }
     }
 }

@@ -11,5 +11,6 @@
         //public string ImgSrcLowQuality { get; set; }
         public string AltText { get; set; }
         public string CssClass { get; set; }
+
     }
 }

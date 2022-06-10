@@ -14,41 +14,71 @@ namespace PictureRenderer
     {
         public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
         {
-            if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            if (profile.SrcSetWidths == null || profile.Sizes == null)
             {
-                imagePath = "http://dummy.com" + imagePath; //to be able to use the Uri object.
-                if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
-                {
-                    throw new Exception("Image url not well formatted.");
-                }
+                throw new Exception($"SrcSetWidths and/or Sizes are not defined in Picture profile.");
             }
-            
-            var uri = new Uri(imagePath, UriKind.Absolute);
-            var originalFormat = GetFormatFromExtension(uri.AbsolutePath);
+
+            var uri = GetUriFromPath(imagePath);
 
             var pData = new PictureData
             {
                 AltText = altText,
                 ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
-                CssClass = cssClass
+                CssClass = cssClass,
+                SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint),
+                SizesAttribute = string.Join(", ", profile.Sizes)
             };
 
-
-            if (profile.SrcSetWidths != null)
+            if (ShouldCreateWebp(profile, uri))
             {
-                pData.SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint);
-                pData.SizesAttribute = string.Join(", ", profile.Sizes);
-
-                
-                if (profile.CreateWebpForFormat != null && profile.CreateWebpForFormat.Contains(originalFormat))
-                {
-                    //Add webp versions.
-                    pData.SrcSetWebp = BuildSrcSet(uri, profile, ImageFormat.Webp, focalPoint);
-                }
+                pData.SrcSetWebp = BuildSrcSet(uri, profile, ImageFormat.Webp, focalPoint);
             }
 
             return pData;
         }
+
+        public static MediaImagesPictureData GetMultiImagePictureData(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
+        {
+            if (profile.MultiImageMediaConditions == null || !profile.MultiImageMediaConditions.Any())
+            {
+                throw new Exception($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
+            }
+
+            Uri fallbackImageUri = default;
+            var numberOfImages = imagePaths.Length;
+            var mediaImagePaths = new List<MediaImagePaths>();
+            for (var i = 0; i < profile.MultiImageMediaConditions.Length; i++)
+            {
+                //If there isn't images for all media conditions, use last image in list.
+                var imagePath = i >= numberOfImages ? imagePaths[numberOfImages-1] : imagePaths[i];
+
+                var imageUri = GetUriFromPath(imagePath);
+                mediaImagePaths.Add(new MediaImagePaths()
+                {
+                    ImagePath = BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, focalPoint),
+                    ImagePathWebp = ShouldCreateWebp(profile, imageUri) ? BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, focalPoint) : string.Empty,
+                    MediaCondition = profile.MultiImageMediaConditions[i].Media
+                });
+
+                if (i == 0)
+                {
+                    //use first image as fallback image
+                    fallbackImageUri = imageUri;
+                }
+            }
+
+            var pData = new MediaImagesPictureData
+            {
+                MediaImages = mediaImagePaths,
+                AltText = altText,
+                ImgSrc = BuildQueryString(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, focalPoint),
+                CssClass = cssClass
+            };
+
+            return pData;
+        }
+
 
         private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
@@ -127,6 +157,26 @@ namespace PictureRenderer
             srcSet = srcSet.TrimEnd(',', ' ');
 
             return srcSet;
+        }
+
+        private static Uri GetUriFromPath(string imagePath)
+        {
+            if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            {
+                imagePath = "http://dummy.com" + imagePath; //to be able to use the Uri object.
+                if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+                {
+                    throw new Exception($"Image url '{imagePath}' is not well formatted.");
+                }
+            }
+
+            return new Uri(imagePath, UriKind.Absolute);
+        }
+
+        private static bool ShouldCreateWebp(PictureProfileBase profile, Uri imageUri)
+        {
+            var originalFormat = GetFormatFromExtension(imageUri.AbsolutePath);
+            return profile.CreateWebpForFormat != null && profile.CreateWebpForFormat.Contains(originalFormat);
         }
 
         private static string GetFormatFromExtension(string filePath)
