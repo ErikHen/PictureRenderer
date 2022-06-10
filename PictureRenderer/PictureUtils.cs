@@ -14,6 +14,11 @@ namespace PictureRenderer
     {
         public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
         {
+            if (profile.SrcSetWidths == null || profile.Sizes == null)
+            {
+                throw new Exception($"SrcSetWidths and/or Sizes are not defined in Picture profile.");
+            }
+
             var uri = GetUriFromPath(imagePath);
 
             var pData = new PictureData
@@ -35,6 +40,11 @@ namespace PictureRenderer
 
         public static MediaImagesPictureData GetMultiImagePictureData(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
         {
+            if (profile.MultiImageMediaConditions == null || !profile.MultiImageMediaConditions.Any())
+            {
+                throw new Exception($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
+            }
+
             Uri fallbackImageUri = default;
             var numberOfImages = imagePaths.Length;
             var mediaImagePaths = new List<MediaImagePaths>();

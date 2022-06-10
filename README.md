@@ -18,7 +18,9 @@ and is a [Google search rank factor](https://developers.google.com/search/docs/a
 <br>
  
 The Picture Renderer works very well together with a CMS where you might not be in control of the exact images that will be used. 
-The content editor doesn't have to care about what aspect ratio, or size, the image has. The most optimal image will always be used.    
+The content editor doesn't have to care about what aspect ratio, or size, the image has. The most optimal image will always be used.<br>
+See also [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer.Optimizely) and [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco)
+
 
 ### Webp format
 The rendered picture element will also contain [webp](https://developers.google.com/speed/webp/) versions of the image. By default this will be rendered for jpg images.
@@ -65,15 +67,24 @@ public static class PictureProfiles
             Sizes = new[] { "150px" },
             AspectRatio = 1  //square image (equal height and width).
         };
+
+    // Multi-image
+    // Show different images depending on media conditions (e.g. different image for mobile sized screen).
+    public static readonly ImageSharpProfile SampleImage2 = new()
+    {
+        MultiImageMediaConditions = new[] { new MediaCondition("(min-width: 1200px)", 600), new MediaCondition("(min-width: 600px)", 300) },
+        AspectRatio = 1.777
+    };
 }
 ```
 
-* **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute.
-* **Sizes** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
+* **SrcSetWidths (for single image)** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute. Ignored when rendering multiple images.
+* **Sizes (for single image)** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute. Ignored when rendering multiple images.
+* **MultiImageMediaConditions (for multi image)** - Define image widths for different media conditions. 
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
 * **CreateWebpForFormat (optional)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
-* **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest SrcSetWidth if not set.
+* **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest width if not set.
 * **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
 * **ImgWidthHeight (optional)** - If true, `width` and `height` attributes will be rendered on the img element.
 
@@ -81,7 +92,7 @@ public static class PictureProfiles
 Render the picture element by calling `Picture.Render`
 <br>
 #### Parameters
-* **ImagePath** - Image path and filename.
+* **ImagePath/ImagePaths** - Single image path, or array of image paths.
 * **profile** - The Picture profile that specifies image widths, etc..
 * **altText (optional)** - Img element `alt` attribute.
 * **lazyLoading (optional)** - Type of lazy loading. Currently only [browser native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) (or none).
@@ -108,6 +119,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
+* **2.2** Added support for "art direction" (e.g. having completely different images for different screen sizes) <br> 
 * **2.1** Just adding some more XML commens + added png format constant. <br> 
 * **2.0** Support for WebP format. Removed deprecated property. Added unit tests. <br> 
 Note that you need to use ImageSharp.Web v2.0+ for WebP support.
@@ -115,15 +127,3 @@ Note that you need to use ImageSharp.Web v2.0+ for WebP support.
 * **1.2.2** Bugfix (unit tests would have found this issue... lesson learned)<br>
 * **1.2** Renamed picture profile property to "Sizes" (old name marked as deprecated).<br>
 <br>
-
-## Roadmap
-- [x] Finish v1.0, add basic instructions how to use, publish repo with sample projects.
-- [x] Create [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer.Optimizely) to simplify usage together with Optimizely CMS.
-- [x] Create [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco) to simplify usage together with Umbraco CMS.
-- [x] Document sample projects a bit more.
-- [x] Add WebP support as soon as [ImageSharp.Web supports it](https://github.com/SixLabors/ImageSharp/pull/1552).
-- [ ] Handle both absolute and relative URIs. Currently always returns a relative URI.
-- [x] Add automated testing.
-- [x] Add more samples, more CMS sample usage.
-- [ ] Add support for Contentful image resizer (if requested).
-- [ ] Add support for ImageProcessor.Web to support ASP.Net Framework (not likely to happen...).

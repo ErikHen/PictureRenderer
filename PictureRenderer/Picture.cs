@@ -8,14 +8,14 @@ namespace PictureRenderer
 {
     public static class Picture
     {
-        //public static string Render(IEnumerable<MediaImage> mediaImages, PictureProfileBase profile)
-        //{
-        //    return Render(imagePath, profile, string.Empty);
-        //}
-
         public static string Render(string imagePath, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             return Render(imagePath, profile, string.Empty, lazyLoading);
+        }
+
+        public static string Render(string[] imagePaths, PictureProfileBase profile, LazyLoading lazyLoading)
+        {
+            return Render(imagePaths, profile, string.Empty, lazyLoading);
         }
 
         public static string Render(string imagePath, PictureProfileBase profile, (double x, double y) focalPoint)
@@ -23,14 +23,29 @@ namespace PictureRenderer
             return Render(imagePath, profile, string.Empty, LazyLoading.Browser, focalPoint);
         }
 
+        public static string Render(string[] imagePaths, PictureProfileBase profile, (double x, double y) focalPoint)
+        {
+            return Render(imagePaths, profile, string.Empty, LazyLoading.Browser, focalPoint);
+        }
+
         public static string Render(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
         {
             return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoint);
         }
 
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
+        {
+            return Render(imagePaths, profile, altText, LazyLoading.Browser, focalPoint);
+        }
+
         public static string Render(string imagePath, PictureProfileBase profile, string altText, string cssClass)
         {
             return Render(imagePath, profile, altText, LazyLoading.Browser, cssClass: cssClass);
+        }
+
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, string cssClass)
+        {
+            return Render(imagePaths, profile, altText, LazyLoading.Browser, cssClass: cssClass);
         }
 
         public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
@@ -51,7 +66,7 @@ namespace PictureRenderer
         }
 
         /// <summary>
-        /// Render multiple different images in the same picture element.
+        /// Render different images in the same picture element.
         /// </summary>
         public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
         {
@@ -95,7 +110,7 @@ namespace PictureRenderer
                 var mediaAttribute = $"media=\"{mediaImage.MediaCondition}\"";
 
                 //add webp source element first
-                if (!string.IsNullOrEmpty(pictureData.SrcSetWebp))
+                if (!string.IsNullOrEmpty(mediaImage.ImagePathWebp))
                 {
                     var srcSetWebpAttribute = $"srcset=\"{mediaImage.ImagePathWebp}\"";
                     var formatAttribute = "type=\"image/webp\"";
