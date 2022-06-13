@@ -38,7 +38,7 @@ namespace PictureRenderer
             return pData;
         }
 
-        public static MediaImagesPictureData GetMultiImagePictureData(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
+        public static MediaImagesPictureData GetMultiImagePictureData(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y)[] focalPoints, string cssClass)
         {
             if (profile.MultiImageMediaConditions == null || !profile.MultiImageMediaConditions.Any())
             {
@@ -46,18 +46,23 @@ namespace PictureRenderer
             }
 
             Uri fallbackImageUri = default;
+            (double x, double y) fallbackImageFocalPoint = default;
             var numberOfImages = imagePaths.Length;
+            var numberOfFocalPoints = focalPoints.Length;
             var mediaImagePaths = new List<MediaImagePaths>();
             for (var i = 0; i < profile.MultiImageMediaConditions.Length; i++)
             {
                 //If there isn't images for all media conditions, use last image in list.
-                var imagePath = i >= numberOfImages ? imagePaths[numberOfImages-1] : imagePaths[i];
+                var imageIndex = i >= numberOfImages ? numberOfImages - 1 : i;
+                var imagePath = imagePaths[imageIndex];
+                //Get focal point for this image (if there is one)
+                var imageFocalPoint = imageIndex >= numberOfFocalPoints ? default : focalPoints[imageIndex];
 
                 var imageUri = GetUriFromPath(imagePath);
                 mediaImagePaths.Add(new MediaImagePaths()
                 {
-                    ImagePath = BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, focalPoint),
-                    ImagePathWebp = ShouldCreateWebp(profile, imageUri) ? BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, focalPoint) : string.Empty,
+                    ImagePath = BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, imageFocalPoint),
+                    ImagePathWebp = ShouldCreateWebp(profile, imageUri) ? BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, imageFocalPoint) : string.Empty,
                     MediaCondition = profile.MultiImageMediaConditions[i].Media
                 });
 
@@ -65,6 +70,7 @@ namespace PictureRenderer
                 {
                     //use first image as fallback image
                     fallbackImageUri = imageUri;
+                    fallbackImageFocalPoint = imageFocalPoint;
                 }
             }
 
@@ -72,7 +78,7 @@ namespace PictureRenderer
             {
                 MediaImages = mediaImagePaths,
                 AltText = altText,
-                ImgSrc = BuildQueryString(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, focalPoint),
+                ImgSrc = BuildQueryString(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, fallbackImageFocalPoint),
                 CssClass = cssClass
             };
 
