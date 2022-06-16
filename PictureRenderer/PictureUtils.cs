@@ -45,6 +45,10 @@ namespace PictureRenderer
                 throw new Exception($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
             }
 
+            if (focalPoints == null)
+            {
+                focalPoints = Array.Empty<(double x, double y)>();
+            }
             Uri fallbackImageUri = default;
             (double x, double y) fallbackImageFocalPoint = default;
             var numberOfImages = imagePaths.Length;

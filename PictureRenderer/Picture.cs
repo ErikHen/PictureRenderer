@@ -28,22 +28,10 @@ namespace PictureRenderer
             return Render(imagePaths, profile, string.Empty, LazyLoading.Browser, focalPoints);
         }
 
-        //[Obsolete("Use array for focal point(s) instead.")]
-        //public static string Render(string[] imagePaths, PictureProfileBase profile, (double x, double y) focalPoint)
-        //{
-        //    return Render(imagePaths, profile, string.Empty, LazyLoading.Browser, new[] { focalPoint });
-        //}
-
         public static string Render(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoints)
         {
             return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoints);
         }
-
-        //[Obsolete("Use array for focal point(s) instead.")]
-        //public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y) focalPoint)
-        //{
-        //    return Render(imagePaths, profile, altText, LazyLoading.Browser, new[] { focalPoint });
-        //}
 
         public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y)[] focalPoints)
         {
@@ -80,7 +68,7 @@ namespace PictureRenderer
         /// <summary>
         /// Render different images in the same picture element.
         /// </summary>
-        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y)[] focalPoints = default, string cssClass = "")
+        public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y)[] focalPoints = null, string cssClass = "")
         {
             var pictureData = PictureUtils.GetMultiImagePictureData(imagePaths, profile, altText, focalPoints, cssClass);
             var sourceElements = RenderSourceElementsForMultiImage(pictureData);
@@ -88,12 +76,6 @@ namespace PictureRenderer
 
             return $"<picture>{sourceElements}{imgElement}</picture>";
         }
-
-        //[Obsolete("Use array for focal point(s) instead.")]
-        //public static string Render(string[] imagePaths, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "")
-        //{
-        //    return Render(imagePaths, profile, altText,lazyLoading, new []{focalPoint}, cssClass);
-        //}
 
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading)
         {
