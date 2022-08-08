@@ -96,7 +96,7 @@ Render the picture element by calling `Picture.Render`
 * **profile** - The Picture profile that specifies image widths, etc..
 * **altText (optional)** - Img element `alt` attribute.
 * **lazyLoading (optional)** - Type of lazy loading. Currently only [browser native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) (or none).
-* **focalPoint (optional)** - Use a focal point when image is cropped. 
+* **focalPoint/focalPoints (optional)** - Use focal point when image is cropped (multiple points for multiple image paths). 
 * **cssClass (optional)** - Css class for img element. 
 
 Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar.
@@ -119,6 +119,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
+* **3.0** Possible to have multiple focal points when having multiple images. Minor breaking change, so bump major version. <br> 
 * **2.2** Added support for "art direction" (e.g. having completely different images for different screen sizes) <br> 
 * **2.1** Just adding some more XML commens + added png format constant. <br> 
 * **2.0** Support for WebP format. Removed deprecated property. Added unit tests. <br> 
