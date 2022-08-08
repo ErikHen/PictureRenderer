@@ -53,6 +53,11 @@ namespace PictureRenderer
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
            
             var sourceElement = RenderSourceElement(pictureData);
+
+
+
+
+
             var sourceElementWebp = string.Empty;
             if (!string.IsNullOrEmpty(pictureData.SrcSetWebp))
             {
