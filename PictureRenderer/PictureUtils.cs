@@ -16,7 +16,7 @@ namespace PictureRenderer
         {
             if (profile.SrcSetWidths == null || profile.Sizes == null)
             {
-                throw new Exception($"SrcSetWidths and/or Sizes are not defined in Picture profile.");
+                throw new ArgumentException($"SrcSetWidths and/or Sizes are not defined in Picture profile.");
             }
 
             var uri = GetUriFromPath(imagePath);
@@ -42,7 +42,7 @@ namespace PictureRenderer
         {
             if (profile.MultiImageMediaConditions == null || !profile.MultiImageMediaConditions.Any())
             {
-                throw new Exception($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
+                throw new ArgumentException($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
             }
 
             if (focalPoints == null)
@@ -109,7 +109,7 @@ namespace PictureRenderer
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
-            return uri.AbsolutePath + "?" + queryItems.ToString(); //string.Join("&", queryItems.AllKeys.Select(a => a + "=" + queryItems[a])); //
+            return uri.AbsolutePath + "?" + queryItems.ToString();
         }
 
         private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
@@ -159,24 +159,23 @@ namespace PictureRenderer
 
         private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat, (double x, double y) focalPoint)
         {
-            var srcSet = string.Empty;
+            var srcSetBuilder = new StringBuilder();
             foreach (var width in profile.SrcSetWidths)
             {
-                srcSet += BuildQueryString(imageUrl, profile, width, wantedFormat, focalPoint) + " " + width + "w, ";
+                srcSetBuilder.Append(BuildQueryString(imageUrl, profile, width, wantedFormat, focalPoint) + " " + width + "w, ");
             }
-            srcSet = srcSet.TrimEnd(',', ' ');
 
-            return srcSet;
+            return srcSetBuilder.ToString().TrimEnd(',', ' ');
         }
 
         private static Uri GetUriFromPath(string imagePath)
         {
             if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
             {
-                imagePath = "http://dummy.com" + imagePath; //to be able to use the Uri object.
+                imagePath = "https://dummy.com" + imagePath; //to be able to use the Uri object.
                 if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
                 {
-                    throw new Exception($"Image url '{imagePath}' is not well formatted.");
+                    throw new ArgumentException($"Image url '{imagePath}' is not well formatted.");
                 }
             }
 

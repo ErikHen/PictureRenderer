@@ -109,7 +109,7 @@ namespace PictureRenderer
 
         private static string RenderSourceElementsForMultiImage(MediaImagesPictureData pictureData)
         {
-            var sourceElements = string.Empty;
+            var sourceElementsBuilder = new StringBuilder();
             foreach (var mediaImage in pictureData.MediaImages)
             {
                 var mediaAttribute = $"media=\"{mediaImage.MediaCondition}\"";
@@ -119,14 +119,14 @@ namespace PictureRenderer
                 {
                     var srcSetWebpAttribute = $"srcset=\"{mediaImage.ImagePathWebp}\"";
                     var formatAttribute = "type=\"image/webp\"";
-                    sourceElements += $"<source {mediaAttribute} {srcSetWebpAttribute} {formatAttribute}/>";
+                    sourceElementsBuilder.Append($"<source {mediaAttribute} {srcSetWebpAttribute} {formatAttribute}/>");
                 }
 
                 var srcSetAttribute = $"srcset=\"{mediaImage.ImagePath}\"";
-                sourceElements += $"<source {mediaAttribute} {srcSetAttribute}/>";
+                sourceElementsBuilder.Append($"<source {mediaAttribute} {srcSetAttribute}/>");
             }
 
-            return sourceElements;
+            return sourceElementsBuilder.ToString();
         }
     }
 }
