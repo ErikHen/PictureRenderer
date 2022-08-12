@@ -119,7 +119,8 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
-* **3.1** Changing some things reported as warnings by Sonarcloud. Making PictureRenderer.ImageFormat public. Don't understand why it was internal in the first place 😊.
+* **3.2** Changing some things reported as warnings by Sonarcloud.
+* **3.1** Making PictureRenderer.ImageFormat public. Don't understand why it was internal in the first place 😊.
 
 * **3.0** Possible to have multiple focal points when having multiple images. Minor breaking change, so bump major version. <br> 
 * **2.2** Added support for "art direction" (e.g. having completely different images for different screen sizes) <br> 
