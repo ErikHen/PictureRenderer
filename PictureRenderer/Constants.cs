@@ -11,7 +11,7 @@ namespace PictureRenderer
         //Progressive,
     }
 
-    internal static class ImageFormat
+    public static class ImageFormat
     {
         public static string Webp => "webp";
         public static string Jpeg => "jpg";
