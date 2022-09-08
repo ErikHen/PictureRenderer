@@ -81,21 +81,21 @@ namespace PictureRenderer
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading, string imgWidth = "")
         {
             var widthAndHeightAttributes = GetImgWidthAndHeightAttributes(profile, imgWidth);
-            var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\"" : string.Empty;
+            var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\" " : string.Empty;
             var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : $"class=\"{HttpUtility.HtmlEncode(pictureData.CssClass)}\"";
-            var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\"";
+            var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\" ";
 
-            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\"src=\"{pictureData.ImgSrc}\"{widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{classAttribute}/>";
+            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{classAttribute}/>";
         }
 
         private static string GetImgWidthAndHeightAttributes(PictureProfileBase profile, string imgWidth)
         {
             if (!string.IsNullOrEmpty(imgWidth))
             {
-                return $"width=\"{imgWidth}\"";
+                return $"width=\"{imgWidth}\" ";
             }
 
-            return profile.ImgWidthHeight ? $"width=\"{profile.FallbackWidth}\"height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\"" : string.Empty;
+            return profile.ImgWidthHeight ? $"width=\"{profile.FallbackWidth}\" height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\" " : string.Empty;
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")
@@ -110,7 +110,7 @@ namespace PictureRenderer
             var srcSetAttribute = $"srcset=\"{srcSet}\"";
             var sizesAttribute = $"sizes=\"{pictureData.SizesAttribute}\"";
 
-            return $"<source {srcSetAttribute}{sizesAttribute}{formatAttribute}/>";
+            return $"<source {srcSetAttribute} {sizesAttribute} {formatAttribute}/>";
         }
 
         private static string RenderSourceElementsForMultiImage(MediaImagesPictureData pictureData)

@@ -119,6 +119,7 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ## Version history
+* **3.3.1** Add space between attributes.
 * **3.3** Adding possibility to set width attribute on img element. Needed for rare edge case in Optimizely CMS.
 * **3.2** Changing some things reported as warnings by Sonarcloud.
 * **3.1** Making PictureRenderer.ImageFormat public. Don't understand why it was internal in the first place 😊.
