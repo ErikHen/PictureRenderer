@@ -121,12 +121,23 @@ namespace PictureRenderer.Tests
         }
 
         [Fact()]
-        public void RenderWithDomainTest()
+        public void RenderWithQuerystringTest()
         {
-            const string expected = "<picture><source srcset=\"https://mydomain.com/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, https://mydomain.com/myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"https://mydomain.com/myImage.jpg?width=150&height=150&quality=80 150w, https://mydomain.com/myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"https://mydomain.com/myImage.jpg?width=400&height=400&quality=80\" loading=\"lazy\" decoding=\"async\" /></picture>";
+            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=20 150w, /myImage.jpg?format=webp&width=300&height=300&quality=20 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=20 150w, /myImage.jpg?width=300&height=300&quality=20 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=400&height=400&quality=20\" loading=\"lazy\" decoding=\"async\" /></picture>";
             var profile = GetTestImageProfile();
 
-            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, "alt text");
+            var result = PictureRenderer.Picture.Render("/myImage.jpg?quality=20", profile, "alt text");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact()]
+        public void RenderWithDomainTest()
+        {
+            const string expected = "<picture><source srcset=\"https://mydomain.com/myImage.jpg?format=webp&width=150&height=150&quality=7 150w, https://mydomain.com/myImage.jpg?format=webp&width=300&height=300&quality=7 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"https://mydomain.com/myImage.jpg?width=150&height=150&quality=7 150w, https://mydomain.com/myImage.jpg?width=300&height=300&quality=7 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"https://mydomain.com/myImage.jpg?width=400&height=400&quality=7\" loading=\"lazy\" decoding=\"async\" /></picture>";
+            var profile = GetTestImageProfile();
+
+            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg?quality=7", profile, "alt text");
 
             Assert.Equal(expected, result);
         }

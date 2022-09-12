@@ -109,13 +109,14 @@ namespace PictureRenderer
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
-            var path = uri.AbsoluteUri;
-            if (uri.Host.Contains("dummy.com"))
+            var domain = string.Empty;
+            if (!uri.Host.Contains("dummy-xyz.com"))
             {
-                path = uri.AbsolutePath;
+                //keep the original image url domain.
+                domain = uri.GetLeftPart(UriPartial.Authority);
             }
 
-            return path + "?" + queryItems.ToString();
+            return domain + uri.AbsolutePath + "?" + queryItems.ToString();
         }
 
         private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
@@ -178,7 +179,7 @@ namespace PictureRenderer
         {
             if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
             {
-                imagePath = "https://dummy.com" + imagePath; //to be able to use the Uri object.
+                imagePath = "https://dummy-xyz.com" + imagePath; //to be able to use the Uri object.
                 if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
                 {
                     throw new ArgumentException($"Image url '{imagePath}' is not well formatted.");
