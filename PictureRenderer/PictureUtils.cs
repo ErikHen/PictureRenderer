@@ -109,7 +109,13 @@ namespace PictureRenderer
             // "quality" have to be after "format".
             queryItems = AddQualityQuery(queryItems, profile);
 
-            return uri.AbsolutePath + "?" + queryItems.ToString();
+            var path = uri.AbsoluteUri;
+            if (uri.Host.Contains("dummy.com"))
+            {
+                path = uri.AbsolutePath;
+            }
+
+            return path + "?" + queryItems.ToString();
         }
 
         private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)

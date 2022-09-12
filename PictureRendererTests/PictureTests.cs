@@ -120,6 +120,17 @@ namespace PictureRenderer.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact()]
+        public void RenderWithDomainTest()
+        {
+            const string expected = "<picture><source srcset=\"https://mydomain.com/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, https://mydomain.com/myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"https://mydomain.com/myImage.jpg?width=150&height=150&quality=80 150w, https://mydomain.com/myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"https://mydomain.com/myImage.jpg?width=400&height=400&quality=80\" loading=\"lazy\" decoding=\"async\" /></picture>";
+            var profile = GetTestImageProfile();
+
+            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, "alt text");
+
+            Assert.Equal(expected, result);
+        }
+
         private static ImageSharpProfile GetTestImageProfile()
         {
             //use this to test with both single and multiple images
