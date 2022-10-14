@@ -87,6 +87,7 @@ public static class PictureProfiles
 * **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest width if not set.
 * **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
 * **ImgWidthHeight (optional)** - If true, `width` and `height` attributes will be rendered on the img element.
+* **ShowInfo (optional)** - If true, an overlay will show info about the currently selected image.
 
 ### Render picture element
 Render the picture element by calling `Picture.Render`
@@ -118,7 +119,14 @@ Basic Blazor sample
 See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
+### How to see that it actually works
+If you set ```ShowInfo = true``` in the picture profile, an overlay with information about the currently selected image will be rendered.<br>
+You can see that different images are selected for different devices and screen sizes. Note that the Chrome (Chromium based) browser will not select a smaller image if a larger one is already downloaded. It may be easier to see the actual behaviour when using e.g. Firefox.
+<br>
+This setting should of course never be true in your live/production environment, it's only meant for testing. 
+
 ## Version history
+* **3.5** Possible to show info about the currently selected image.
 * **3.4** Keep domain in image urls (earlier it always returned an absolute path).
 * **3.3.1** Add space between attributes.
 * **3.3** Adding possibility to set width attribute on img element. Needed for rare edge case in Optimizely CMS.

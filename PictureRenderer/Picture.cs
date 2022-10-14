@@ -59,11 +59,12 @@ namespace PictureRenderer
             {
                 sourceElementWebp = RenderSourceElement(pictureData, ImageFormat.Webp);
             }
-
-            var imgElement = RenderImgElement(pictureData, profile, lazyLoading, imgWidth);
             
-            //Webp source element must be rendered first. Browser selects the first version it supports.
-            return $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>";
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading, imgWidth);
+            var pictureElement = $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>"; //Webp source element must be rendered first. Browser selects the first version it supports.
+            var infoElements = RenderInfoElements(profile, pictureData);
+
+            return $"{pictureElement}{infoElements}";
         }
 
         /// <summary>
@@ -74,18 +75,21 @@ namespace PictureRenderer
             var pictureData = PictureUtils.GetMultiImagePictureData(imagePaths, profile, altText, focalPoints, cssClass);
             var sourceElements = RenderSourceElementsForMultiImage(pictureData);
             var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+            var pictureElement = $"<picture>{sourceElements}{imgElement}</picture>";
+            var infoElements = RenderInfoElements(profile, pictureData);
 
-            return $"<picture>{sourceElements}{imgElement}</picture>";
+            return $"{pictureElement}{infoElements}";
         }
 
         private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading, string imgWidth = "")
         {
+            var idAttribute = string.IsNullOrEmpty(pictureData.UniqueId) ? string.Empty : $" id=\"{pictureData.UniqueId}\"";
             var widthAndHeightAttributes = GetImgWidthAndHeightAttributes(profile, imgWidth);
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\" " : string.Empty;
             var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : $"class=\"{HttpUtility.HtmlEncode(pictureData.CssClass)}\"";
             var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\" ";
 
-            return $"<img alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{classAttribute}/>";
+            return $"<img{idAttribute} alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{classAttribute}/>";
         }
 
         private static string GetImgWidthAndHeightAttributes(PictureProfileBase profile, string imgWidth)
@@ -133,6 +137,17 @@ namespace PictureRenderer
             }
 
             return sourceElementsBuilder.ToString();
+        }
+
+        private static string RenderInfoElements(PictureProfileBase pictureProfile,  PictureData pictureData)
+        {
+            if (!pictureProfile.ShowInfo)
+            {
+                return string.Empty;
+            }
+            var infoDiv = $"<div id=\"pinfo{pictureData.UniqueId}\" style=\"position: absolute; margin-top:-60px; padding:0 5px 2px 5px; font-size:0.8rem; text-align:left; background-color:rgba(255, 255, 255, 0.8);\"></div>";
+            var script =$"<script type=\"text/javascript\"> window.addEventListener(\"load\",function () {{ const pictureInfo = document.getElementById('pinfo{pictureData.UniqueId}'); var image = document.getElementById('{pictureData.UniqueId}'); pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); image.onload = function () {{ pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); }}; function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }} }}, false);</script>";
+            return "\n" + infoDiv + "\n" + script;
         }
     }
 }

@@ -66,11 +66,15 @@ namespace PictureRenderer.Profiles
         /// </summary>
         public ImageDecoding ImageDecoding {get; set;}
 
+        public bool ShowInfo { get; set; }
+
+
         protected PictureProfileBase()
         {
             Quality = 80;
             CreateWebpForFormat = new string[] {ImageFormat.Jpeg};
             ImageDecoding = ImageDecoding.Async;
+            ShowInfo = false;
         }
     }
 }
