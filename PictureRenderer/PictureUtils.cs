@@ -27,7 +27,8 @@ namespace PictureRenderer
                 ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
                 CssClass = cssClass,
                 SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint),
-                SizesAttribute = string.Join(", ", profile.Sizes)
+                SizesAttribute = string.Join(", ", profile.Sizes),
+                UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
             };
 
             if (ShouldCreateWebp(profile, uri))
@@ -83,7 +84,8 @@ namespace PictureRenderer
                 MediaImages = mediaImagePaths,
                 AltText = altText,
                 ImgSrc = BuildQueryString(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, fallbackImageFocalPoint),
-                CssClass = cssClass
+                CssClass = cssClass,
+                UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
             };
 
             return pData;
