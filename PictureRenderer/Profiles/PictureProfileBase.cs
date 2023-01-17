@@ -57,6 +57,12 @@ namespace PictureRenderer.Profiles
         public double AspectRatio { get; set; }
 
         /// <summary>
+        /// Set a static height in order to render the height attribute in the img tag without setting a static aspect ratio. 
+        /// Useful for wide images on small screens, to utilize cropping in imagesharp.  
+        /// </summary>
+        public int? FixedHeight { get; set; }
+
+        /// <summary>
         /// If true, width and height attributes will be rendered on the img element.
         /// </summary>
         public bool ImgWidthHeight { get; set; }

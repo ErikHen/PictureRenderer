@@ -98,8 +98,23 @@ namespace PictureRenderer
             {
                 return $"width=\"{imgWidth}\" ";
             }
+            if(profile.ImgWidthHeight)
+            {
+                var widthAttribute = $"width=\"{profile.FallbackWidth}\" ";
+                var heightAttribute = "";
+                if (profile.AspectRatio > 0)
+                {
+                    heightAttribute = $"height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\" ";
+                } 
+                else if (profile.FixedHeight != null && profile.FixedHeight > 0)
+                {
+                    heightAttribute = $"height=\"{profile.FixedHeight}\" ";
 
-            return profile.ImgWidthHeight ? $"width=\"{profile.FallbackWidth}\" height=\"{Math.Round(profile.FallbackWidth / profile.AspectRatio)}\" " : string.Empty;
+                }
+                return widthAttribute + heightAttribute ;
+            }
+
+            return string.Empty;
         }
 
         private static string RenderSourceElement(PictureData pictureData, string format = "")

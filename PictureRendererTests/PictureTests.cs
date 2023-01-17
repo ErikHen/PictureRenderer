@@ -72,6 +72,23 @@ namespace PictureRenderer.Tests
         }
 
         [Fact()]
+        public void RenderWithFixedHeight()
+        {
+            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=100&quality=80 150w, /myImage.jpg?format=webp&width=300&height=100&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=100&quality=80 150w, /myImage.jpg?width=300&height=100&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=100&quality=80\" width=\"300\" height=\"100\" loading=\"lazy\" decoding=\"async\" /></picture>";
+            var profile = new ImageSharpProfile()
+            {
+                SrcSetWidths = new[] { 150, 300 },
+                Sizes = new[] { "150px" },
+                ImgWidthHeight = true,
+                FixedHeight = 100,
+            };
+
+            var result = Picture.Render("/myImage.jpg", profile, "alt text");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact()]
         public void RenderMultiImageTest()
         {
             const string expected = "<picture><source media=\"(min-width: 1200px)\" srcset=\"/myImage.jpg?format=webp&width=400&height=400&quality=80\" type=\"image/webp\"/><source media=\"(min-width: 1200px)\" srcset=\"/myImage.jpg?width=400&height=400&quality=80\"/><source media=\"(min-width: 600px)\" srcset=\"/myImage2.png?width=200&height=200&quality=80\"/><source media=\"(min-width: 300px)\" srcset=\"/myImage3.jpg?format=webp&width=100&height=100&quality=80\" type=\"image/webp\"/><source media=\"(min-width: 300px)\" srcset=\"/myImage3.jpg?width=100&height=100&quality=80\"/><img alt=\"\" src=\"/myImage.jpg?width=400&height=400&quality=80\" loading=\"lazy\" decoding=\"async\" /></picture>";
