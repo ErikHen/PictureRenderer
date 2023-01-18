@@ -81,6 +81,7 @@ namespace PictureRenderer.Tests
                 Sizes = new[] { "150px" },
                 ImgWidthHeight = true,
                 FixedHeight = 100,
+               // AspectRatio = 1,
             };
 
             var result = Picture.Render("/myImage.jpg", profile, "alt text");

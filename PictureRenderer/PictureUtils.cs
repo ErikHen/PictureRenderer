@@ -135,12 +135,14 @@ namespace PictureRenderer
 
         private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
         {
-            //Add height if aspect ratio is set, and height is not already in the querystring.
+            //Do nothing if height is already in the querystring.
             if (queryItems["height"] != null)
             {
                 return queryItems;
             }
-            else if (profile.AspectRatio > 0)
+
+            //Add height based on aspect ratio, or from FixedHeight.
+            if (profile.AspectRatio > 0)
             {
                 queryItems.Add("height", Convert.ToInt32(imageWidth / profile.AspectRatio).ToString()); 
             } 
