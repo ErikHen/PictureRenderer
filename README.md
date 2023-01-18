@@ -82,7 +82,7 @@ public static class PictureProfiles
 * **Sizes (for single image)** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute. Ignored when rendering multiple images.
 * **MultiImageMediaConditions (for multi image)** - Define image widths for different media conditions. 
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
-* **FixedHeight (optional)** – The wanted height of the image across varying screen widths. Overridden by AspectRatio.
+* **FixedHeight (optional)** – Set a fixed height for all image sizes. Overrides the aspect ratio setting.
 * **CreateWebpForFormat (optional)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
 * **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest width if not set.
