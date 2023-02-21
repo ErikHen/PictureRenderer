@@ -21,11 +21,7 @@ namespace PictureRenderer.Profiles
         /// </summary>
         public int? Quality { get; set; }
 
-        /// <summary>
-        /// The image formats that should be offered as webp versions.
-        /// PictureRenderer.ImageFormat.Jpeg is added by default.
-        /// </summary>
-        public string[] CreateWebpForFormat { get; set; } 
+        
 
         /// <summary>
         /// Image width for browsers without support for picture element. Will use the largest image if not set.
@@ -77,7 +73,6 @@ namespace PictureRenderer.Profiles
         protected PictureProfileBase()
         {
             Quality = 80;
-            CreateWebpForFormat = new string[] {ImageFormat.Jpeg};
             ImageDecoding = ImageDecoding.Async;
             ShowInfo = false;
         }

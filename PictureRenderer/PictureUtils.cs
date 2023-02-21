@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using PictureRenderer.Profiles;
+using PictureRenderer.UrlBuilders;
 
 namespace PictureRenderer
 {
@@ -24,14 +25,14 @@ namespace PictureRenderer
             var pData = new PictureData
             {
                 AltText = altText,
-                ImgSrc = BuildQueryString(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
+                ImgSrc = BuildImageUrl(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
                 CssClass = cssClass,
                 SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint),
                 SizesAttribute = string.Join(", ", profile.Sizes),
                 UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
             };
 
-            if (ShouldCreateWebp(profile, uri))
+            if (ShouldRenderWebp(profile, uri))
             {
                 pData.SrcSetWebp = BuildSrcSet(uri, profile, ImageFormat.Webp, focalPoint);
             }
@@ -66,8 +67,8 @@ namespace PictureRenderer
                 var imageUri = GetUriFromPath(imagePath);
                 mediaImagePaths.Add(new MediaImagePaths()
                 {
-                    ImagePath = BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, imageFocalPoint),
-                    ImagePathWebp = ShouldCreateWebp(profile, imageUri) ? BuildQueryString(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, imageFocalPoint) : string.Empty,
+                    ImagePath = BuildImageUrl(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, imageFocalPoint),
+                    ImagePathWebp = ShouldRenderWebp(profile, imageUri) ? BuildImageUrl(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, imageFocalPoint) : string.Empty,
                     MediaCondition = profile.MultiImageMediaConditions[i].Media
                 });
 
@@ -83,7 +84,7 @@ namespace PictureRenderer
             {
                 MediaImages = mediaImagePaths,
                 AltText = altText,
-                ImgSrc = BuildQueryString(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, fallbackImageFocalPoint),
+                ImgSrc = BuildImageUrl(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, fallbackImageFocalPoint),
                 CssClass = cssClass,
                 UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
             };
@@ -92,96 +93,103 @@ namespace PictureRenderer
         }
 
 
-        private static string BuildQueryString(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
+        private static string BuildImageUrl(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
-            var queryItems = HttpUtility.ParseQueryString(uri.Query);
-
-            if (!string.IsNullOrEmpty(wantedFormat))
+            if (profile is ImageSharpProfile imageSharpProfile)
             {
-                queryItems.Remove("format"); //remove if it already exists
-                queryItems.Add("format", wantedFormat);
+                return ImageSharpUrlBuilder.BuildImageUrl(uri, imageSharpProfile, imageWidth, wantedFormat, focalPoint);
             }
 
-            queryItems.Add("width", imageWidth.ToString());
+            return string.Empty;
+            //var queryItems = HttpUtility.ParseQueryString(uri.Query);
 
-            queryItems = AddHeightQuery(imageWidth, queryItems, profile);
+            //if (!string.IsNullOrEmpty(wantedFormat))
+            //{
+            //    queryItems.Remove("format"); //remove if it already exists
+            //    queryItems.Add("format", wantedFormat);
+            //}
 
-            queryItems = AddFocalPointQuery(focalPoint, queryItems);
+            //queryItems.Add("width", imageWidth.ToString());
+
+            //queryItems = AddHeightQuery(imageWidth, queryItems, profile);
+
+            //queryItems = AddFocalPointQuery(focalPoint, queryItems);
+
+            //// "quality" have to be after "format".
+            //queryItems = AddQualityQuery(queryItems, profile);
+
+            //var domain = string.Empty;
+            //if (!uri.Host.Contains("dummy-xyz.com"))
+            //{
+            //    //keep the original image url domain.
+            //    domain = uri.GetLeftPart(UriPartial.Authority);
+            //}
+
+            //return domain + uri.AbsolutePath + "?" + queryItems.ToString();
+        }
+
+        
+
+        
+
+        internal static (string x, string y) FocalPointAsString((double x, double y) focalPoint)
+        {
+            var x = Math.Round(focalPoint.x, 3).ToString(CultureInfo.InvariantCulture);
+            var y = Math.Round(focalPoint.y, 3).ToString(CultureInfo.InvariantCulture);
             
-            // "quality" have to be after "format".
-            queryItems = AddQualityQuery(queryItems, profile);
-
-            var domain = string.Empty;
-            if (!uri.Host.Contains("dummy-xyz.com"))
-            {
-                //keep the original image url domain.
-                domain = uri.GetLeftPart(UriPartial.Authority);
-            }
-
-            return domain + uri.AbsolutePath + "?" + queryItems.ToString();
+            return (x,y);
         }
 
-        private static NameValueCollection AddFocalPointQuery((double x, double y) focalPoint, NameValueCollection queryItems)
+        //private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
+        //{
+        //    //Do nothing if height is already in the querystring.
+        //    if (queryItems["height"] != null)
+        //    {
+        //        return queryItems;
+        //    }
+
+        //    ////Add height based on aspect ratio, or from FixedHeight.
+        //    //if (profile.AspectRatio > 0)
+        //    //{
+        //    //    queryItems.Add("height", Convert.ToInt32(imageWidth / profile.AspectRatio).ToString()); 
+        //    //} 
+        //    //else if (profile.FixedHeight != null && profile.FixedHeight > 0)
+        //    //{
+        //    //    queryItems.Add("height", profile.FixedHeight.ToString());
+        //    //}
+
+        //    var height = GetImageHeight(imageWidth, profile);
+        //    if (height > 0)
+        //    {
+        //        queryItems.Add("height", height.ToString());
+        //    }
+
+        //    return queryItems;
+        //}
+
+        internal static int GetImageHeight(int imageWidth, PictureProfileBase profile)
         {
-            if ((focalPoint.x > 0 || focalPoint.y > 0) && queryItems["rxy"] == null)
-            {
-                var x = Math.Round(focalPoint.x, 3).ToString(CultureInfo.InvariantCulture);
-                var y = Math.Round(focalPoint.y, 3).ToString(CultureInfo.InvariantCulture);
-                queryItems.Add("rxy", $"{x},{y}");
-            }
-
-            return queryItems;
-        }
-
-        private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
-        {
-            //Do nothing if height is already in the querystring.
-            if (queryItems["height"] != null)
-            {
-                return queryItems;
-            }
-
             //Add height based on aspect ratio, or from FixedHeight.
             if (profile.AspectRatio > 0)
             {
-                queryItems.Add("height", Convert.ToInt32(imageWidth / profile.AspectRatio).ToString()); 
-            } 
+                return Convert.ToInt32(imageWidth / profile.AspectRatio);
+            }
             else if (profile.FixedHeight != null && profile.FixedHeight > 0)
             {
-                queryItems.Add("height", profile.FixedHeight.ToString());
+                return profile.FixedHeight.Value;
             }
 
-            return queryItems;
+            return 0;
         }
 
-        private static NameValueCollection AddQualityQuery(NameValueCollection queryItems, PictureProfileBase profile)
-        {
-            //TODO: Ignore quality for png etc
-            if (queryItems["quality"] == null)
-            {
-                if (profile.Quality != null)
-                {
-                    //Add quality value from profile.
-                    queryItems.Add("quality", profile.Quality.ToString());
-                }
-            }
-            else
-            {
-                //Quality value already exists in querystring. Don't change it, but make sure it's last (after format).
-                var quality = queryItems["quality"];
-                queryItems.Remove("quality");
-                queryItems.Add("quality", quality);
-            }
-
-            return queryItems;
-        }
+       
 
         private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat, (double x, double y) focalPoint)
         {
             var srcSetBuilder = new StringBuilder();
             foreach (var width in profile.SrcSetWidths)
             {
-                srcSetBuilder.Append(BuildQueryString(imageUrl, profile, width, wantedFormat, focalPoint) + " " + width + "w, ");
+                srcSetBuilder.Append(BuildImageUrl(imageUrl, profile, width, wantedFormat, focalPoint) + " " + width + "w, ");
             }
 
             return srcSetBuilder.ToString().TrimEnd(',', ' ');
@@ -201,10 +209,26 @@ namespace PictureRenderer
             return new Uri(imagePath, UriKind.Absolute);
         }
 
-        private static bool ShouldCreateWebp(PictureProfileBase profile, Uri imageUri)
+        internal static string GetImageDomain(Uri uri)
         {
-            var originalFormat = GetFormatFromExtension(imageUri.AbsolutePath);
-            return profile.CreateWebpForFormat != null && profile.CreateWebpForFormat.Contains(originalFormat);
+            var domain = string.Empty;
+            if (!uri.Host.Contains("dummy-xyz.com"))
+            {
+                //return the original image url domain.
+                domain = uri.GetLeftPart(UriPartial.Authority);
+            }
+            return domain;
+        }
+
+        private static bool ShouldRenderWebp(PictureProfileBase profile, Uri imageUri)
+        {
+            if (profile is ImageSharpProfile imageSharpProfile)
+            {
+                var originalFormat = GetFormatFromExtension(imageUri.AbsolutePath);
+                return imageSharpProfile.CreateWebpForFormat != null && imageSharpProfile.CreateWebpForFormat.Contains(originalFormat);
+            }
+
+            return false;
         }
 
         private static string GetFormatFromExtension(string filePath)
