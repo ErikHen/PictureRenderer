@@ -1,13 +1,11 @@
-﻿using System;
+﻿using PictureRenderer.Profiles;
+using PictureRenderer.UrlBuilders;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web;
-using PictureRenderer.Profiles;
-using PictureRenderer.UrlBuilders;
 
 namespace PictureRenderer
 {
@@ -101,36 +99,7 @@ namespace PictureRenderer
             }
 
             return string.Empty;
-            //var queryItems = HttpUtility.ParseQueryString(uri.Query);
-
-            //if (!string.IsNullOrEmpty(wantedFormat))
-            //{
-            //    queryItems.Remove("format"); //remove if it already exists
-            //    queryItems.Add("format", wantedFormat);
-            //}
-
-            //queryItems.Add("width", imageWidth.ToString());
-
-            //queryItems = AddHeightQuery(imageWidth, queryItems, profile);
-
-            //queryItems = AddFocalPointQuery(focalPoint, queryItems);
-
-            //// "quality" have to be after "format".
-            //queryItems = AddQualityQuery(queryItems, profile);
-
-            //var domain = string.Empty;
-            //if (!uri.Host.Contains("dummy-xyz.com"))
-            //{
-            //    //keep the original image url domain.
-            //    domain = uri.GetLeftPart(UriPartial.Authority);
-            //}
-
-            //return domain + uri.AbsolutePath + "?" + queryItems.ToString();
         }
-
-        
-
-        
 
         internal static (string x, string y) FocalPointAsString((double x, double y) focalPoint)
         {
@@ -139,33 +108,6 @@ namespace PictureRenderer
             
             return (x,y);
         }
-
-        //private static NameValueCollection AddHeightQuery(int imageWidth, NameValueCollection queryItems, PictureProfileBase profile)
-        //{
-        //    //Do nothing if height is already in the querystring.
-        //    if (queryItems["height"] != null)
-        //    {
-        //        return queryItems;
-        //    }
-
-        //    ////Add height based on aspect ratio, or from FixedHeight.
-        //    //if (profile.AspectRatio > 0)
-        //    //{
-        //    //    queryItems.Add("height", Convert.ToInt32(imageWidth / profile.AspectRatio).ToString()); 
-        //    //} 
-        //    //else if (profile.FixedHeight != null && profile.FixedHeight > 0)
-        //    //{
-        //    //    queryItems.Add("height", profile.FixedHeight.ToString());
-        //    //}
-
-        //    var height = GetImageHeight(imageWidth, profile);
-        //    if (height > 0)
-        //    {
-        //        queryItems.Add("height", height.ToString());
-        //    }
-
-        //    return queryItems;
-        //}
 
         internal static int GetImageHeight(int imageWidth, PictureProfileBase profile)
         {
@@ -181,8 +123,6 @@ namespace PictureRenderer
 
             return 0;
         }
-
-       
 
         private static string BuildSrcSet(Uri imageUrl, PictureProfileBase profile, string wantedFormat, (double x, double y) focalPoint)
         {
