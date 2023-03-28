@@ -137,16 +137,21 @@ namespace PictureRenderer
 
         private static Uri GetUriFromPath(string imagePath)
         {
-            if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+            if (!IsValidHttpUri(imagePath, out var uri))
             {
-                imagePath = "https://dummy-xyz.com" + imagePath; //to be able to use the Uri object.
-                if (!Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+                //A Uri object must have a domain, but imagePath might be just a path. Add dummy domain, and test again.
+                imagePath = "https://dummy-xyz.com" + imagePath; 
+                if (!IsValidHttpUri(imagePath, out uri))
                 {
                     throw new ArgumentException($"Image url '{imagePath}' is not well formatted.");
                 }
             }
 
-            return new Uri(imagePath, UriKind.Absolute);
+            return uri;
+        }
+
+        private static bool IsValidHttpUri(string uriString, out Uri uri) {
+            return Uri.TryCreate(uriString, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
 
         internal static string GetImageDomain(Uri uri)
