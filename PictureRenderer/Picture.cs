@@ -177,8 +177,18 @@ namespace PictureRenderer
             {
                 return string.Empty;
             }
+            
+            var formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }}";
+            if (pictureProfile is StoryblokProfile storyblokProfile)
+            {
+                formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/m/').pop().replaceAll('/', ', '); }}";
+            }
+            if (pictureProfile is CloudflareProfile cloudFlarekProfile)
+            {
+                formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/cdn-cgi/image/').pop().replace('/http', ', http'); }}";
+            }
             var infoDiv = $"<div id=\"pinfo{pictureData.UniqueId}\" style=\"position: absolute; margin-top:-60px; padding:0 5px 2px 5px; font-size:0.8rem; text-align:left; background-color:rgba(255, 255, 255, 0.8);\"></div>";
-            var script =$"<script type=\"text/javascript\"> window.addEventListener(\"load\",function () {{ const pictureInfo = document.getElementById('pinfo{pictureData.UniqueId}'); var image = document.getElementById('{pictureData.UniqueId}'); pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); image.onload = function () {{ pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); }}; function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }} }}, false);</script>";
+            var script =$"<script type=\"text/javascript\"> window.addEventListener(\"load\",function () {{ const pictureInfo = document.getElementById('pinfo{pictureData.UniqueId}'); var image = document.getElementById('{pictureData.UniqueId}'); pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); image.onload = function () {{ pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); }}; {formatFunction} }}, false);</script>";
             return "\n" + infoDiv + "\n" + script;
         }
     }

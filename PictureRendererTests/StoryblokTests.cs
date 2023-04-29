@@ -61,6 +61,25 @@ namespace PictureRenderer.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact()]
+        public void RenderWithInfoTest()
+        {
+            const string expectedStart = "<picture><source srcset=\"https://mydomain.com/myImage.jpg/m/150x150 150w, https://mydomain.com/myImage.jpg/m/300x300 300w\" sizes=\"150px\" /><img id=\"";
+            const string expectedContains1 = "<div id=\"pinfo";
+            const string expectedContains2 = "style=\"position: absolute; margin-top:-60px; padding:0 5px 2px 5px; font-size:0.8rem; text-align:left; background-color:rgba(255, 255, 255, 0.8);\"></div>";
+            const string expectedContains3 = "window.addEventListener(\"load\",function () { const pictureInfo = document.getElementById('";
+            const string expectedEnd = "(input) { return input.split('/m/').pop().replaceAll('/', ', '); } }, false);</script>";
+            var profile = GetTestImageProfile();
+            profile.ShowInfo = true;
+
+            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile);
+
+            Assert.StartsWith(expectedStart, result);
+            Assert.Contains(expectedContains1, result);
+            Assert.Contains(expectedContains2, result);
+            Assert.Contains(expectedContains3, result);
+            Assert.EndsWith(expectedEnd, result);
+        }
 
         private static StoryblokProfile GetTestImageProfile()
         {

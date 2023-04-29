@@ -130,7 +130,8 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 If you set ```ShowInfo = true``` in the picture profile, an overlay with information about the currently selected image will be rendered.<br>
 You can see that different images are selected for different devices and screen sizes. Note that the Chrome (Chromium based) browser will not select a smaller image if a larger one is already downloaded. It may be easier to see the actual behaviour when using e.g. Firefox.
 <br>
-This setting should of course never be true in your live/production environment, it's only meant for testing. 
+This setting should of course never be true in your live/production environment, it's only meant for testing. <br>
+Note that this may not work if using Blazor.
 
 ## Version history
 * **3.7** Added support for Storyblok and Cloudflare image services.
