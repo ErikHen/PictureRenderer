@@ -14,6 +14,7 @@ namespace PictureRenderer.Profiles
 
         public ImageSharpProfile() : base()
         {
+            Quality = 80;
             CreateWebpForFormat = new[] { ImageFormat.Jpeg };
         }
     }

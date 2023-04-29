@@ -90,14 +90,17 @@ namespace PictureRenderer
             return pData;
         }
 
-
         private static string BuildImageUrl(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
             if (profile is ImageSharpProfile imageSharpProfile)
             {
                 return ImageSharpUrlBuilder.BuildImageUrl(uri, imageSharpProfile, imageWidth, wantedFormat, focalPoint);
             }
-
+            
+            if (profile is StoryblokProfile storyblokProfile)
+            {
+                return StoryblokUrlBuilder.BuildStoryblokUrl(uri, storyblokProfile, imageWidth, focalPoint);
+            }
             return string.Empty;
         }
 

@@ -6,7 +6,7 @@ namespace PictureRenderer.Tests
 {
     // simplify escaping by using http://easyonlineconverter.com/converters/dot-net-string-escape.html
 
-    public class PictureTests
+    public class ImageSharpTests
     {
         [Fact()]
         public void RenderWithoutWebpTest()

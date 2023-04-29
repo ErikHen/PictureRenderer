@@ -72,7 +72,7 @@ namespace PictureRenderer.Profiles
 
         protected PictureProfileBase()
         {
-            Quality = 80;
+
             ImageDecoding = ImageDecoding.Async;
             ShowInfo = false;
         }
