@@ -9,7 +9,7 @@ It’s then up to the browser to select the most appropriate image depending on 
 If you are unfamiliar with the details of the Picture element i highly recommed reading
  [this](https://webdesign.tutsplus.com/tutorials/quick-tip-how-to-use-html5-picture-for-responsive-images--cms-21015) and/or [this](https://www.smashingmagazine.com/2014/05/responsive-images-done-right-guide-picture-srcset/).
 
-Picture Renderer is used together with [SixLabors/ImageSharp.Web](https://github.com/SixLabors/ImageSharp.Web) to create the different image versions (support for other image processors may be added in the future).
+Picture Renderer currently works together with [SixLabors/ImageSharp.Web](https://github.com/SixLabors/ImageSharp.Web), [Storyblok's Image service](https://www.storyblok.com/docs/image-service), and [Cloudflare image resizing](https://developers.cloudflare.com/images/image-resizing/) (other image processors can be added on request).
 
 ## Why should you use this?
 You want the images on your web site to be as optimized as possible. For example, having the most optimal image for any screen size and device type, 
@@ -23,16 +23,22 @@ See also [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer
 
 
 ### Webp format
-The rendered picture element will also contain [webp](https://developers.google.com/speed/webp/) versions of the image. By default this will be rendered for jpg images.
+If using [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) as image processor, the rendered picture element will also contain [webp](https://developers.google.com/speed/webp/) versions of the image. 
+By default this will be rendered for jpg images.<br>
+Storyblok and Cloudflare image services automatically converts images to Webp if the browser supports it.
 
 ## How to use
-* Add [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) to the slution for the server that will take care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
-* Add [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) to the solution that renders the HTML (which may of course be the same as the solution that does the image resizing).
-* Create Picture profiles for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
+* Add the [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) nuget.
+* Create Picture profiles (ImageSharp or Storyblok) for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
 You could for example create Picture profiles for: “Top hero image”, “Teaser image”, “Image gallery thumbnail”.
 * Let Picture Renderer create the picture HTML element.
 
+If using ImageSharp you need to make sure that [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) is enabled on the server that takes care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
+
+
 ### Picture profile
+
+#### Examples
 ```c#
 using PictureRenderer.Profiles;
 
@@ -83,7 +89,7 @@ public static class PictureProfiles
 * **MultiImageMediaConditions (for multi image)** - Define image widths for different media conditions. 
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
 * **FixedHeight (optional)** – Set a fixed height for all image sizes. Fixed height is ignored if aspect ratio is set.
-* **CreateWebpForFormat (optional)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
+* **CreateWebpForFormat (optional, ImageSharp only)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
 * **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest width if not set.
 * **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
@@ -127,6 +133,7 @@ You can see that different images are selected for different devices and screen 
 This setting should of course never be true in your live/production environment, it's only meant for testing. 
 
 ## Version history
+* **3.7** Added support for Storyblok and Cloudflare image services.
 * **3.6** Possible to set a fixed height. Thanks [Karl](https://github.com/karlsvan)!
 * **3.5** Possible to show info about the currently selected image.
 * **3.4** Keep domain in image urls (earlier it always returned an absolute path).

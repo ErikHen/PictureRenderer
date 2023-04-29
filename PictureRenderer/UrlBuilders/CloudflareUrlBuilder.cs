@@ -7,7 +7,7 @@ namespace PictureRenderer.UrlBuilders
 {
     internal static class CloudflareUrlBuilder
     {
-        private static string BuildCloudflareUrl(Uri uri, CloudflareProfile profile, int imageWidth, (double x, double y) focalPoint)
+        internal static string BuildCloudflareUrl(Uri uri, CloudflareProfile profile, int imageWidth, (double x, double y) focalPoint)
         {
             var imageOptions = new Dictionary<string, string>
             {
@@ -22,7 +22,7 @@ namespace PictureRenderer.UrlBuilders
                 imageOptions.Add("height", height.ToString());
             }
 
-            if (profile.Quality != null) //todo: check if quality is used 
+            if (profile.Quality != null) 
             {
                 imageOptions.Add("quality", profile.Quality.ToString());
             }

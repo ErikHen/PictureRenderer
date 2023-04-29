@@ -101,6 +101,12 @@ namespace PictureRenderer
             {
                 return StoryblokUrlBuilder.BuildStoryblokUrl(uri, storyblokProfile, imageWidth, focalPoint);
             }
+
+            if (profile is CloudflareProfile cloudflareProfile)
+            {
+                return CloudflareUrlBuilder.BuildCloudflareUrl(uri, cloudflareProfile, imageWidth, focalPoint);
+            }
+            
             return string.Empty;
         }
 
