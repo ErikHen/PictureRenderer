@@ -33,7 +33,12 @@ namespace PictureRenderer.UrlBuilders
                 imageOptions.Add("gravity", $"{x}x{y}");
             }
 
-            return "/cdn-cgi/image/" + string.Join(",", imageOptions.Select(o => $"{o.Key}={o.Value}")) + "/" + PictureUtils.GetImageDomain(uri) + uri.AbsolutePath;
+            var imageDomain = PictureUtils.GetImageDomain(uri);
+            if (!string.IsNullOrEmpty(imageDomain))
+            {
+                imageDomain = "/" + imageDomain;
+            }
+            return "/cdn-cgi/image/" + string.Join(",", imageOptions.Select(o => $"{o.Key}={o.Value}")) + imageDomain + uri.AbsolutePath;
         }
     }
 }
