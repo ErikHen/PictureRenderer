@@ -9,8 +9,8 @@
     <PackageIcon>picture_icon.png</PackageIcon>
     <PackageIconUrl />
     <PackageProjectUrl>https://github.com/ErikHen/PictureRenderer</PackageProjectUrl>
-    <PackageTags>Picture;element Responsive ImageSharp Storyblok Webp</PackageTags>
-    <Description>Simplify rendering of HTML picture element. With support for responsive, lazy loaded images in the most optimal format.</Description>
+    <PackageTags>Picture;element Responsive ImageSharp Storyblok Cloudflare Webp</PackageTags>
+    <Description>Simplify rendering of HTML picture element. With support for responsive, lazy loaded images in the most optimal format. Works with Storyblok Image Service, Cloudflare Image Resizing, and ImageSharp (used by for example Umbraco CMS and Optimizely CMS).</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
