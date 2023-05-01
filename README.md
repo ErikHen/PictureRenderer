@@ -29,7 +29,7 @@ Storyblok and Cloudflare image services automatically converts images to Webp if
 
 ## How to use
 * Add the [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) nuget.
-* Create Picture profiles (ImageSharp or Storyblok) for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
+* Create Picture profiles (ImageSharpProfile, StoryblokProfile, or CloudflareProfile) for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
 You could for example create Picture profiles for: “Top hero image”, “Teaser image”, “Image gallery thumbnail”.
 * Let Picture Renderer create the picture HTML element.
 
@@ -45,7 +45,7 @@ using PictureRenderer.Profiles;
 public static class PictureProfiles
 {
     // Sample image
-    // Up to 640 pixels viewport width, the picture width will be 100% of the viewport minus 40 pixels.
+    // Up to 640 pixels viewport width, the picture width will be 100% of the viewport..
     // Up to 1200 pixels viewport width, the picture width will be 320 pixels.
     // On larger viewport width, the picture width will be 750 pixels.
     // Note that picture width is not the same as image width (but it can be, on screens with a "device pixel ratio" of 1).
