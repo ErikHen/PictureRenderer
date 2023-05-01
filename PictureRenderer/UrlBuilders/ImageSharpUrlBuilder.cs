@@ -50,7 +50,7 @@ namespace PictureRenderer.UrlBuilders
 
         private static NameValueCollection AddQualityQuery(NameValueCollection queryItems, PictureProfileBase profile)
         {
-            //TODO: Ignore quality for png etc
+            //TODO: Ignore quality for png images.
             if (queryItems["quality"] == null)
             {
                 if (profile.Quality != null)

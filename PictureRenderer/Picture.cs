@@ -179,11 +179,11 @@ namespace PictureRenderer
             }
             
             var formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }}";
-            if (pictureProfile is StoryblokProfile storyblokProfile)
+            if (pictureProfile is StoryblokProfile)
             {
                 formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/m/').pop().replaceAll('/', ', '); }}";
             }
-            if (pictureProfile is CloudflareProfile cloudFlarekProfile)
+            if (pictureProfile is CloudflareProfile)
             {
                 formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/cdn-cgi/image/').pop().replace('/http', ', http'); }}";
             }
