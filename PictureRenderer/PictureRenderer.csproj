@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.6</Version>
+    <Version>3.7</Version>
     <Authors>Erik Henningson</Authors>
     <Company />
     <Product />
     <PackageIcon>picture_icon.png</PackageIcon>
     <PackageIconUrl />
     <PackageProjectUrl>https://github.com/ErikHen/PictureRenderer</PackageProjectUrl>
-    <PackageTags>Picture;element Responsive ImageSharp Webp</PackageTags>
-    <Description>Simplify rendering of HTML picture element. With support for responsive, lazy loaded images in Webp format.</Description>
+    <PackageTags>Picture;element Responsive ImageSharp Storyblok Cloudflare Webp</PackageTags>
+    <Description>Simplify rendering of HTML picture element. With support for responsive, lazy loaded images in the most optimal format. Works with Storyblok Image Service, Cloudflare Image Resizing, and ImageSharp (used by for example Umbraco CMS and Optimizely CMS).</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
