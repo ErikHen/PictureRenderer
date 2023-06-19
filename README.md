@@ -22,10 +22,10 @@ The content editor doesn't have to care about what aspect ratio, or size, the im
 See also [PictureRenderer.Optimizely](https://github.com/ErikHen/PictureRenderer.Optimizely) and [PictureRenderer.Umbraco](https://github.com/ErikHen/PictureRenderer.Umbraco)
 
 
-### Webp format
+### Webp/AVIF format
 If using [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) as image processor, the rendered picture element will also contain [webp](https://developers.google.com/speed/webp/) versions of the image. 
 By default this will be rendered for jpg images.<br>
-Storyblok and Cloudflare image services automatically converts images to Webp if the browser supports it.
+Storyblok and Cloudflare image services automatically converts images to Webp or AVIF format, if the browser supports it.
 
 ## How to use
 * Add the [PictureRenderer](https://www.nuget.org/packages/PictureRenderer/) nuget.
