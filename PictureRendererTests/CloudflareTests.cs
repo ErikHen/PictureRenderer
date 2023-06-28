@@ -59,6 +59,18 @@ namespace PictureRenderer.Tests
             Assert.Equal(expected, result);
         }
 
+        [Fact()]
+        public void RenderWhenDisabled()
+        {
+            const string expected = "<picture><source srcset=\"/myImage.jpg 150w, /myImage.jpg 300w\" sizes=\"150px\" /><img alt=\"\" src=\"/myImage.jpg\" loading=\"lazy\" decoding=\"async\" /></picture>";
+            var profile = GetTestImageProfile();
+            profile.IsDisabled = true;
+
+            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile);
+
+            Assert.Equal(expected, result);
+        }
+
 
         private static CloudflareProfile GetTestImageProfile()
         {

@@ -6,6 +6,11 @@ namespace PictureRenderer.Profiles
 {
     public class CloudflareProfile : PictureProfileBase
     {
+        public bool IsDisabled { get; set; }
 
+        public CloudflareProfile() : base()
+        {
+            IsDisabled = false;
+        }
     }
 }
