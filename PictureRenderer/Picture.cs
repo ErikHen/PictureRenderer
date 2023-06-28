@@ -13,6 +13,9 @@ namespace PictureRenderer
             return Render(imagePath, profile, string.Empty, lazyLoading);
         }
 
+        /// <summary>
+        /// Render different images in the same picture element.
+        /// </summary>
         public static string Render(string[] imagePaths, PictureProfileBase profile, LazyLoading lazyLoading)
         {
             return Render(imagePaths, profile, string.Empty, lazyLoading);
@@ -23,6 +26,9 @@ namespace PictureRenderer
             return Render(imagePath, profile, string.Empty, LazyLoading.Browser, focalPoint);
         }
 
+        /// <summary>
+        /// Render different images in the same picture element.
+        /// </summary>
         public static string Render(string[] imagePaths, PictureProfileBase profile, (double x, double y)[] focalPoints)
         {
             return Render(imagePaths, profile, string.Empty, LazyLoading.Browser, focalPoints);
@@ -33,6 +39,9 @@ namespace PictureRenderer
             return Render(imagePath, profile, altText, LazyLoading.Browser, focalPoints);
         }
 
+        /// <summary>
+        /// Render different images in the same picture element.
+        /// </summary>
         public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y)[] focalPoints)
         {
             return Render(imagePaths, profile, altText, LazyLoading.Browser, focalPoints);
@@ -43,11 +52,19 @@ namespace PictureRenderer
             return Render(imagePath, profile, altText, LazyLoading.Browser, cssClass: cssClass);
         }
 
+        /// <summary>
+        /// Render different images in the same picture element.
+        /// </summary>
         public static string Render(string[] imagePaths, PictureProfileBase profile, string altText, string cssClass)
         {
             return Render(imagePaths, profile, altText, LazyLoading.Browser, focalPoints: default, cssClass: cssClass);
         }
 
+        /// <summary>
+        /// Render picture element.
+        /// </summary>
+        /// <param name="focalPoint">Value range: 0-1 for ImageSharp, 1-[image width/height] for Storyblok.</param>
+        /// <returns></returns>
         public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "", string imgWidth = "")
         {
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
@@ -160,8 +177,18 @@ namespace PictureRenderer
             {
                 return string.Empty;
             }
+            
+            var formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }}";
+            if (pictureProfile is StoryblokProfile)
+            {
+                formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/m/').pop().replaceAll('/', ', '); }}";
+            }
+            if (pictureProfile is CloudflareProfile)
+            {
+                formatFunction = $"function format{pictureData.UniqueId}(input) {{ return input.split('/cdn-cgi/image/').pop().replace('/http', ', http'); }}";
+            }
             var infoDiv = $"<div id=\"pinfo{pictureData.UniqueId}\" style=\"position: absolute; margin-top:-60px; padding:0 5px 2px 5px; font-size:0.8rem; text-align:left; background-color:rgba(255, 255, 255, 0.8);\"></div>";
-            var script =$"<script type=\"text/javascript\"> window.addEventListener(\"load\",function () {{ const pictureInfo = document.getElementById('pinfo{pictureData.UniqueId}'); var image = document.getElementById('{pictureData.UniqueId}'); pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); image.onload = function () {{ pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); }}; function format{pictureData.UniqueId}(input) {{ return input.split('/').pop().replace('?', '\\n').replaceAll('&', ', ').replace('%2c', ',').replace('rxy', 'focal point'); }} }}, false);</script>";
+            var script =$"<script type=\"text/javascript\"> window.addEventListener(\"load\",function () {{ const pictureInfo = document.getElementById('pinfo{pictureData.UniqueId}'); var image = document.getElementById('{pictureData.UniqueId}'); pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); image.onload = function () {{ pictureInfo.innerText = format{pictureData.UniqueId}(image.currentSrc); }}; {formatFunction} }}, false);</script>";
             return "\n" + infoDiv + "\n" + script;
         }
     }
