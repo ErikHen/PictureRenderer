@@ -159,10 +159,6 @@ namespace PictureRenderer
             return uri;
         }
 
-        private static bool IsValidHttpUri(string uriString, out Uri uri) {
-            return Uri.TryCreate(uriString, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
-        }
-
         internal static string GetImageDomain(Uri uri)
         {
             var domain = string.Empty;
@@ -172,6 +168,11 @@ namespace PictureRenderer
                 domain = uri.GetLeftPart(UriPartial.Authority);
             }
             return domain;
+        }
+
+        private static bool IsValidHttpUri(string uriString, out Uri uri)
+        {
+            return Uri.TryCreate(uriString, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
         }
 
         private static bool ShouldRenderWebp(PictureProfileBase profile, Uri imageUri)

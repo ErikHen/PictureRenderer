@@ -9,6 +9,12 @@ namespace PictureRenderer.UrlBuilders
     {
         internal static string BuildCloudflareUrl(Uri uri, CloudflareProfile profile, int imageWidth, (double x, double y) focalPoint)
         {
+            //just return the original url if Cloudflare rendering is disabled
+            if (profile.IsDisabled)
+            {
+                return PictureUtils.GetImageDomain(uri) + uri.AbsolutePath;
+            }
+
             var imageOptions = new Dictionary<string, string>
             {
                 { "width", imageWidth.ToString() },
