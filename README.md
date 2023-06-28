@@ -134,6 +134,7 @@ This setting should of course never be true in your live/production environment,
 Note that this may not work if using Blazor.
 
 ## Version history
+* **3.8** Possible to disable Cloudflare processing (may be wanted on dev environment).
 * **3.7** Added support for Storyblok and Cloudflare image services.
 * **3.6** Possible to set a fixed height. Thanks [Karl](https://github.com/karlsvan)!
 * **3.5** Possible to show info about the currently selected image.
