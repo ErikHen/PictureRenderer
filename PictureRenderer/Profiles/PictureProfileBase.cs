@@ -68,7 +68,7 @@ namespace PictureRenderer.Profiles
         public ImageDecoding ImageDecoding {get; set;}
 
         /// <summary>
-        /// Img element decoding attribute.
+        /// Img element fetchPriority attribute.
         /// </summary>
         public FetchPriority FetchPriority {get; set;}
 
