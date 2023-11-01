@@ -95,6 +95,7 @@ public static class PictureProfiles
 * **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
 * **ImgWidthHeight (optional)** - If true, `width` and `height` attributes will be rendered on the img element.
 * **ShowInfo (optional)** - If true, an overlay will show info about the currently selected image.
+* **FetchPriority (optional)** - Value for img element `fetchPriority` attribute. Default value: `none` (unset)
 
 ### Render picture element
 Render the picture element by calling `Picture.Render`
