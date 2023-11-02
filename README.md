@@ -135,6 +135,7 @@ This setting should of course never be true in your live/production environment,
 Note that this may not work if using Blazor.
 
 ## Version history
+* **3.9** Possible to set [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) attribute. Thanks [Karol](https://github.com/karolberezicki)!
 * **3.8** Possible to disable Cloudflare processing (may be wanted on dev environment).
 * **3.7** Added support for Storyblok and Cloudflare image services.
 * **3.6** Possible to set a fixed height. Thanks [Karl](https://github.com/karlsvan)!
