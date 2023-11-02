@@ -105,8 +105,9 @@ namespace PictureRenderer
             var loadingAttribute = lazyLoading == LazyLoading.Browser ? "loading=\"lazy\" " : string.Empty;
             var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : $"class=\"{HttpUtility.HtmlEncode(pictureData.CssClass)}\"";
             var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\" ";
+            var fetchPriorityAttribute = profile.FetchPriority == FetchPriority.None ? string.Empty :  $"fetchPriority=\"{Enum.GetName(typeof(FetchPriority), profile.FetchPriority)?.ToLower()}\" ";
 
-            return $"<img{idAttribute} alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{classAttribute}/>";
+            return $"<img{idAttribute} alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{fetchPriorityAttribute}{classAttribute}/>";
         }
 
         private static string GetImgWidthAndHeightAttributes(PictureProfileBase profile, string imgWidth)

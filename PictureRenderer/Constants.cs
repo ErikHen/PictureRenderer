@@ -25,4 +25,12 @@ namespace PictureRenderer
         Auto,
         None
     }
+
+    public enum FetchPriority
+    {
+        None,
+        Auto,
+        Low,
+        High,
+    }
 }
