@@ -65,7 +65,7 @@ namespace PictureRenderer
         /// </summary>
         /// <param name="focalPoint">Value range: 0-1 for ImageSharp, 1-[image width/height] for Storyblok.</param>
         /// <returns></returns>
-        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "", string imgWidth = "")
+        public static string Render(string imagePath, PictureProfileBase profile, string altText = "", LazyLoading lazyLoading = LazyLoading.Browser, (double x, double y) focalPoint = default, string cssClass = "", string imgWidth = "", string style = "")
         {
             var pictureData = PictureUtils.GetPictureData(imagePath, profile, altText, focalPoint, cssClass);
            
@@ -77,7 +77,7 @@ namespace PictureRenderer
                 sourceElementWebp = RenderSourceElement(pictureData, ImageFormat.Webp);
             }
             
-            var imgElement = RenderImgElement(pictureData, profile, lazyLoading, imgWidth);
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading, imgWidth, style);
             var pictureElement = $"<picture>{sourceElementWebp}{sourceElement}{imgElement}</picture>"; //Webp source element must be rendered first. Browser selects the first version it supports.
             var infoElements = RenderInfoElements(profile, pictureData);
 
@@ -91,14 +91,14 @@ namespace PictureRenderer
         {
             var pictureData = PictureUtils.GetMultiImagePictureData(imagePaths, profile, altText, focalPoints, cssClass);
             var sourceElements = RenderSourceElementsForMultiImage(pictureData);
-            var imgElement = RenderImgElement(pictureData, profile, lazyLoading);
+            var imgElement = RenderImgElement(pictureData, profile, lazyLoading, string.Empty, string.Empty);
             var pictureElement = $"<picture>{sourceElements}{imgElement}</picture>";
             var infoElements = RenderInfoElements(profile, pictureData);
 
             return $"{pictureElement}{infoElements}";
         }
 
-        private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading, string imgWidth = "")
+        private static string RenderImgElement(PictureData pictureData, PictureProfileBase profile, LazyLoading lazyLoading, string imgWidth, string style)
         {
             var idAttribute = string.IsNullOrEmpty(pictureData.UniqueId) ? string.Empty : $" id=\"{pictureData.UniqueId}\"";
             var widthAndHeightAttributes = GetImgWidthAndHeightAttributes(profile, imgWidth);
@@ -106,8 +106,9 @@ namespace PictureRenderer
             var classAttribute = string.IsNullOrEmpty(pictureData.CssClass) ? string.Empty : $"class=\"{HttpUtility.HtmlEncode(pictureData.CssClass)}\"";
             var decodingAttribute = profile.ImageDecoding == ImageDecoding.None ? string.Empty :  $"decoding=\"{Enum.GetName(typeof(ImageDecoding), profile.ImageDecoding)?.ToLower()}\" ";
             var fetchPriorityAttribute = profile.FetchPriority == FetchPriority.None ? string.Empty :  $"fetchPriority=\"{Enum.GetName(typeof(FetchPriority), profile.FetchPriority)?.ToLower()}\" ";
+            var styleAttribute = string.IsNullOrEmpty(style) ? string.Empty : $"style=\"{style}\" ";
 
-            return $"<img{idAttribute} alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{fetchPriorityAttribute}{classAttribute}/>";
+            return $"<img{idAttribute} alt=\"{HttpUtility.HtmlEncode(pictureData.AltText)}\" src=\"{pictureData.ImgSrc}\" {widthAndHeightAttributes}{loadingAttribute}{decodingAttribute}{fetchPriorityAttribute}{classAttribute}{styleAttribute}/>";
         }
 
         private static string GetImgWidthAndHeightAttributes(PictureProfileBase profile, string imgWidth)

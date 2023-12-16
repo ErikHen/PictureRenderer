@@ -37,6 +37,17 @@ namespace PictureRenderer.Tests
         }
 
         [Fact()]
+        public void RenderWithStyleTest()
+        {
+            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=400&height=400&quality=80\" loading=\"lazy\" decoding=\"async\" style=\"float: right;\" /></picture>";
+            var profile = GetTestImageProfile();
+
+            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text", style: "float: right;");
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact()]
         public void RenderWithCssClassAndImageDecodingAuto()
         {
             const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" loading=\"lazy\" decoding=\"auto\" class=\"my-css-class\"/></picture>";
