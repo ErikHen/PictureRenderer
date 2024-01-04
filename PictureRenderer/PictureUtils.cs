@@ -9,7 +9,7 @@ using System.Text;
 
 namespace PictureRenderer
 {
-    internal static class PictureUtils
+    public static class PictureUtils
     {
         public static PictureData GetPictureData(string imagePath, PictureProfileBase profile, string altText, (double x, double y) focalPoint, string cssClass)
         {
