@@ -1,6 +1,6 @@
 ﻿namespace PictureRenderer
 {
-    internal class PictureData
+    public class PictureData
     {
         public string SrcSet { get; set; }
         public string SrcSetWebp { get; set; }

@@ -2,12 +2,12 @@
 
 namespace PictureRenderer
 {
-    internal class MediaImagesPictureData : PictureData
+    public class MediaImagesPictureData : PictureData
     {
         public IEnumerable<MediaImagePaths> MediaImages { get; set; }
     }
 
-    internal class MediaImagePaths
+    public class MediaImagePaths
     {
         public string ImagePath { get; set; }
         public string ImagePathWebp { get; set; }
