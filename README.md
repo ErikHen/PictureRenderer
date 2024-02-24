@@ -135,6 +135,7 @@ This setting should of course never be true in your live/production environment,
 Note that this may not work if using Blazor.
 
 ## Version history
+* **3.11** Make PictureUtil/GetPictureData public as requested in [#19](https://github.com/ErikHen/PictureRenderer/issues/19)
 * **3.10** Possible to set style attribute (added to img element).
 * **3.9** Possible to set [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) attribute. Thanks [Karol](https://github.com/karolberezicki)!
 * **3.8** Possible to disable Cloudflare processing (may be wanted on dev environment).
