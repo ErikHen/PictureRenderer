@@ -27,6 +27,7 @@ namespace PictureRenderer
                 CssClass = cssClass,
                 SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint),
                 SizesAttribute = string.Join(", ", profile.Sizes),
+                DefaultMediaClass = profile.DefaultMediaClass,
                 UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
             };
 
@@ -92,6 +93,11 @@ namespace PictureRenderer
 
         private static string BuildImageUrl(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
+            if (profile.UsePlaceholders) 
+            {
+                return GeneratePlaceholderUrl(imageWidth);
+            }
+
             if (profile is ImageSharpProfile imageSharpProfile)
             {
                 return ImageSharpUrlBuilder.BuildImageUrl(uri, imageSharpProfile, imageWidth, wantedFormat, focalPoint);
@@ -108,6 +114,25 @@ namespace PictureRenderer
             }
             
             return string.Empty;
+        }
+
+        private static string GeneratePlaceholderUrl(int imageWidth)
+        {
+            Random random = new Random();
+            var rnd = new string(Enumerable.Range(0, 5).Select(_ => (char)random.Next('a', 'z' + 1)).ToArray());
+
+            if (imageWidth > 1024) // Desktop
+            {
+                return "https://source.unsplash.com/random/1280x720?dog,dogs&r=" + rnd;
+            }
+            else if (imageWidth > 641 && imageWidth < 1024) // Tablets
+            {
+                return "https://source.unsplash.com/random/1024x576?cat,cats&r=" + rnd;
+            }
+            else // Mobile and others
+            {
+                return "https://source.unsplash.com/random/896x504?bug,bugs&r=" + rnd;
+            }
         }
 
         internal static (string x, string y) FocalPointAsString((double x, double y) focalPoint)

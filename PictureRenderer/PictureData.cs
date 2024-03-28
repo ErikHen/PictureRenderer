@@ -11,6 +11,7 @@
         //public string ImgSrcLowQuality { get; set; }
         public string AltText { get; set; }
         public string CssClass { get; set; }
+        public string DefaultMediaClass { get; set; }
         /// <summary>
         /// Id used when rendering picture info.
         /// </summary>
