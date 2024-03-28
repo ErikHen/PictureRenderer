@@ -74,6 +74,25 @@ namespace PictureRenderer.Profiles
 
         public bool ShowInfo { get; set; }
 
+        /// <summary>
+        /// If true, images will be fetched from unsplash.
+        /// </summary>
+        public bool UsePlaceholders { get; set; } = false;
+
+        /// <summary>
+        /// If true, the picture-element will be wraped around a figure-element.
+        /// </summary>
+        public bool UseFigureWrap { get; set; } = false;
+
+        /// <summary>
+        /// If true and UseFigureWrap is true, the alt-text will be written to a figcaption-element.
+        /// </summary>
+        public bool IncludeFigcaption { get; set; } = false;
+
+        /// <summary>
+        /// If set, these classes will be added to the source and img element.
+        /// </summary>
+        public string DefaultMediaClass { get; set; } = "";
 
         protected PictureProfileBase()
         {
