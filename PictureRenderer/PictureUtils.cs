@@ -23,7 +23,7 @@ namespace PictureRenderer
             var pData = new PictureData
             {
                 AltText = altText,
-                ImgSrc = BuildImageUrl(uri, profile, profile.FallbackWidth, string.Empty, focalPoint),
+                ImgSrc = BuildImageUrl(uri, profile, profile.SrcSetWidths.Max(), string.Empty, focalPoint),
                 CssClass = cssClass,
                 SrcSet = BuildSrcSet(uri, profile, string.Empty, focalPoint),
                 SizesAttribute = string.Join(", ", profile.Sizes),
