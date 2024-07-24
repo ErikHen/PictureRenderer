@@ -21,7 +21,7 @@ namespace PictureRenderer
         public ImageDecoding ImgDecoding { get; set; }
 
         /// <summary>
-        /// img element fetchPriority attribute. Default value: auto
+        /// img element fetchPriority attribute. Default value: none.
         /// </summary>
         public FetchPriority ImgFetchPriority { get; set; }
 

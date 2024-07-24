@@ -32,6 +32,7 @@ Storyblok and Cloudflare image services automatically converts images to Webp or
 * Create Picture profiles (ImageSharpProfile, StoryblokProfile, or CloudflareProfile) for the different types of images that you have on your web site. A Picture profile describes how an image should be scaled in various cases. <br>
 You could for example create Picture profiles for: “Top hero image”, “Teaser image”, “Image gallery thumbnail”.
 * Let Picture Renderer create the picture HTML element.
+* Fine-tune how the picture element is rendered by setting parameters like css class, fetch priority, etc.
 
 If using ImageSharp you need to make sure that [ImageSharp.Web](https://www.nuget.org/packages/SixLabors.ImageSharp.Web/) is enabled on the server that takes care of the actual resizing of the images (see also [Setup and configuration](https://docs.sixlabors.com/articles/imagesharp.web/gettingstarted.html#setup-and-configuration)).
 
@@ -73,42 +74,35 @@ public static class PictureProfiles
             Sizes = new[] { "150px" },
             AspectRatio = 1  //square image (equal height and width).
         };
-
-    // Multi-image
-    // Show different images depending on media conditions (e.g. different image for mobile sized screen).
-    public static readonly ImageSharpProfile SampleImage2 = new()
-    {
-        MultiImageMediaConditions = new[] { new MediaCondition("(min-width: 1200px)", 600), new MediaCondition("(min-width: 600px)", 300) },
-        AspectRatio = 1.777
-    };
 }
 ```
 
-* **SrcSetWidths (for single image)** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute. Ignored when rendering multiple images.
-* **Sizes (for single image)** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute. Ignored when rendering multiple images.
-* **MultiImageMediaConditions (for multi image)** - Define image widths for different media conditions. 
+* **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute.
+* **Sizes** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
 * **FixedHeight (optional)** – Set a fixed height for all image sizes. Fixed height is ignored if aspect ratio is set.
 * **CreateWebpForFormat (optional, ImageSharp only)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
-* **FallbackWidth (optional)** – This image width will be used in browsers that don’t support the picture element. Will use the largest width if not set.
-* **ImageDecoding (optional)** - Value for img element `decoding` attribute. Default value: `async`.
-* **ImgWidthHeight (optional)** - If true, `width` and `height` attributes will be rendered on the img element.
-* **ShowInfo (optional)** - If true, an overlay will show info about the currently selected image.
-* **FetchPriority (optional)** - Value for img element `fetchPriority` attribute. Default value: `none` (unset)
+
 
 ### Render picture element
 Render the picture element by calling `Picture.Render`
 <br>
 #### Parameters
-* **ImagePath/ImagePaths** - Single image path, or array of image paths.
-* **profile** - The Picture profile that specifies image widths, etc..
-* **altText (optional)** - Img element `alt` attribute.
-* **lazyLoading (optional)** - Type of lazy loading. Currently only [browser native lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading#images_and_iframes) (or none).
-* **focalPoint/focalPoints (optional)** - Use focal point when image is cropped (multiple points for multiple image paths). 
-* **cssClass (optional)** - Css class for img element. 
+* **imagePath** - Relative path, or full Url to the image.
+* **profile** - The Picture profile that specifies image widths, etc.
+* **focalPoint (optional)** - Use focal point when image is cropped. 
+* **attributes (optional)** - A PictureAttributes object with additional attributes/settings that fine-tunes the rendering.<br>
+  * **ImgAlt** - `alt` attribute for img element.
+  * **ImgClass** - `class` attribute for img element.
+  * **ImgFetchPriority** - `fetchPriority` attribute for img element. Default value: none.
+  * **ImgDecoding** - `decoding` attribute for img element. Default value: async.
+  * **LazyLoading** - Type of lazy loading. Currently supports browser native or none. Default value: browser native.
+  * **RenderImgWidthHeight** - If true, width and height attributes will be rendered on the img element. Default value: false.
+  * **ImgAdditionalAttributes** - May be used to add additional attributes (like data or itemprop attributes) to the img element.
 
-Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar.
+Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar. <br>
+I recommend wrapping the Picture.Render an Html helper/Tag helper (for MVC/Razor pages) or a component (for Blazor).
 <br> 
 
 Basic MVC/Razor page sample
@@ -128,13 +122,11 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
 ### How to see that it actually works
-If you set ```ShowInfo = true``` in the picture profile, an overlay with information about the currently selected image will be rendered.<br>
-You can see that different images are selected for different devices and screen sizes. Note that the Chrome (Chromium based) browser will not select a smaller image if a larger one is already downloaded. It may be easier to see the actual behaviour when using e.g. Firefox.
-<br>
-This setting should of course never be true in your live/production environment, it's only meant for testing. <br>
-Note that this may not work if using Blazor.
+
 
 ## Version history
+* **3.12** Possible to set any attribute on the img element. <br>Switch to using a PictureAttributes object for various settings, instead of individual parameters. <br>
+Prepare for v4. <br>
 * **3.11** Make PictureUtil/GetPictureData public as requested in [#19](https://github.com/ErikHen/PictureRenderer/issues/19)
 * **3.10** Possible to set style attribute (added to img element).
 * **3.9** Possible to set [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) attribute. Thanks [Karol](https://github.com/karolberezicki)!
