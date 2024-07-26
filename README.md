@@ -77,12 +77,14 @@ public static class PictureProfiles
 }
 ```
 
-* **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the srcset attribute.
-* **Sizes** – Define the size (width) the image should be according to a set of “media conditions” (similar to css media queries). Values are used to render the sizes attribute.
+* **SrcSetWidths** – The different image widths you want the browser to select from. These values are used when rendering the `srcset` attribute.
+* **Sizes** – Define the size (width) the image should be according to a set of [media conditions](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) (similar to css media queries). Values are used to render the `sizes` attribute.
 * **AspectRatio (optional)** – The wanted aspect ratio of the image (width/height). Ex: An image with aspect ratio 16:9 = 16/9 = 1.777.
 * **FixedHeight (optional)** – Set a fixed height for all image sizes. Fixed height is ignored if aspect ratio is set.
 * **CreateWebpForFormat (optional, ImageSharp only)** - The image formats that should be offered as webp versions. Jpg format is aded by default.
 * **Quality (optional)** - Image quality. Lower value = less file size. Not valid for all image formats. Default value: `80`.
+* **IsDisabled (optional, Cloudflare only)** - Do not alter the image url at all. May be useful in a development environment where you are not using the CloudFlare CDN.
+
 
 
 ### Render picture element
@@ -99,7 +101,7 @@ Render the picture element by calling `Picture.Render`
   * **ImgDecoding** - `decoding` attribute for img element. Default value: async.
   * **LazyLoading** - Type of lazy loading. Currently supports browser native or none. Default value: browser native.
   * **RenderImgWidthHeight** - If true, width and height attributes will be rendered on the img element. Default value: false.
-  * **ImgAdditionalAttributes** - May be used to add additional attributes (like data or itemprop attributes) to the img element.
+  * **ImgAdditionalAttributes** - Key-value dictionary that may be used to add additional attributes (like data or itemprop attributes) to the img element.
 
 Picture.Render returns a string, so you need to make sure the string is not HTML-escaped by using Html.Raw or similar. <br>
 I recommend wrapping the Picture.Render an Html helper/Tag helper (for MVC/Razor pages) or a component (for Blazor).
@@ -108,6 +110,7 @@ I recommend wrapping the Picture.Render an Html helper/Tag helper (for MVC/Razor
 Basic MVC/Razor page sample
 ```
 @Html.Raw(Picture.Render("/img/test.jpg", PictureProfiles.SampleImage)) 
+@Html.Raw(Picture.Render("/img/test.jpg", PictureProfiles.SampleImage, new PictureAttributes { ImgAlt = "alt text", ImgClass = "my-css-class")) 
 ```
 <br>
 
@@ -121,12 +124,15 @@ Basic Blazor sample
 See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 <br><br>
 
-### How to see that it actually works
+<!-- ### How to see that it actually works -->
 
 
 ## Version history
-* **3.12** Possible to set any attribute on the img element. <br>Switch to using a PictureAttributes object for various settings, instead of individual parameters. <br>
-Prepare for v4. <br>
+* **3.12** Possible to set any attribute on the img element. Prepare for v4.
+    > [!NOTE]
+    > Switch to using a PictureAttributes object, instead of individual parameters, when calling `Picture.Render` . <br>
+    Some settings have been moved from PictureProfile to the new PictureAttributes object. <br>
+  
 * **3.11** Make PictureUtil/GetPictureData public as requested in [#19](https://github.com/ErikHen/PictureRenderer/issues/19)
 * **3.10** Possible to set style attribute (added to img element).
 * **3.9** Possible to set [fetchpriority](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/fetchPriority) attribute. Thanks [Karol](https://github.com/karolberezicki)!
