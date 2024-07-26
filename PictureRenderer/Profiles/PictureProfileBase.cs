@@ -61,19 +61,19 @@ namespace PictureRenderer.Profiles
         /// <summary>
         /// If true, width and height attributes will be rendered on the img element.
         /// </summary>
-        [Obsolete("Use PictureAttribute instead. Will be removed in next major version.")]
+        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
         public bool ImgWidthHeight { get; set; }
 
         /// <summary>
         /// Img element decoding attribute.
         /// </summary>
-        [Obsolete("Use PictureAttribute instead. Will be removed in next major version.")]
+        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
         public ImageDecoding ImageDecoding {get; set;}
 
         /// <summary>
         /// Img element fetchPriority attribute.
         /// </summary>
-        [Obsolete("Use PictureAttribute instead. Will be removed in next major version.")]
+        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
         public FetchPriority FetchPriority {get; set;}
 
         public bool ShowInfo { get; set; }

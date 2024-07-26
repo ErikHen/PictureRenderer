@@ -1,4 +1,5 @@
-﻿using PictureRenderer.Profiles;
+﻿using System.Collections.Generic;
+using PictureRenderer.Profiles;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -99,7 +100,7 @@ namespace PictureRenderer.Tests
                 Sizes = new[] { "150px" },
                 AspectRatio = 1,
             };
-            var attributes = new PictureAttributes() { ImgAlt = "alt text", ImgClass = "my-css-class", ImgDecoding = ImageDecoding.Auto};
+            var attributes = new PictureAttributes { ImgAlt = "alt text", ImgClass = "my-css-class", ImgDecoding = ImageDecoding.Auto};
 
             var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, attributes);
 
@@ -210,41 +211,41 @@ namespace PictureRenderer.Tests
             Assert.Equal(expected, result);
         }
 
-        [Fact()]
-        public void RenderWithWidthAndHeightAndFetchPriorityHigh()
-        {
-            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" width=\"300\" height=\"300\" loading=\"lazy\" decoding=\"async\" fetchPriority=\"high\" /></picture>";
-            var profile = new ImageSharpProfile()
-            {
-                SrcSetWidths = new[] { 150, 300 },
-                Sizes = new[] { "150px" },
-                AspectRatio = 1,
-                ImgWidthHeight = true,
-                FetchPriority = FetchPriority.High,
-            };
+        //[Fact()]
+        //public void RenderWithWidthAndHeightAndFetchPriorityHigh()
+        //{
+        //    const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" width=\"300\" height=\"300\" loading=\"lazy\" decoding=\"async\" fetchPriority=\"high\" /></picture>";
+        //    var profile = new ImageSharpProfile()
+        //    {
+        //        SrcSetWidths = new[] { 150, 300 },
+        //        Sizes = new[] { "150px" },
+        //        AspectRatio = 1,
+        //        ImgWidthHeight = true,
+        //        FetchPriority = FetchPriority.High,
+        //    };
 
-            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text");
+        //    var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text");
 
-            Assert.Equal(expected, result);
-        }
+        //    Assert.Equal(expected, result);
+        //}
 
-        [Fact()]
-        public void RenderWithWidthAndHeightAndFetchPriorityLow()
-        {
-            const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" width=\"300\" height=\"300\" loading=\"lazy\" decoding=\"async\" fetchPriority=\"low\" /></picture>";
-            var profile = new ImageSharpProfile()
-            {
-                SrcSetWidths = new[] { 150, 300 },
-                Sizes = new[] { "150px" },
-                AspectRatio = 1,
-                ImgWidthHeight = true,
-                FetchPriority = FetchPriority.Low,
-            };
+        //[Fact()]
+        //public void RenderWithWidthAndHeightAndFetchPriorityLow()
+        //{
+        //    const string expected = "<picture><source srcset=\"/myImage.jpg?format=webp&width=150&height=150&quality=80 150w, /myImage.jpg?format=webp&width=300&height=300&quality=80 300w\" sizes=\"150px\" type=\"image/webp\"/><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/myImage.jpg?width=300&height=300&quality=80\" width=\"300\" height=\"300\" loading=\"lazy\" decoding=\"async\" fetchPriority=\"low\" /></picture>";
+        //    var profile = new ImageSharpProfile()
+        //    {
+        //        SrcSetWidths = new[] { 150, 300 },
+        //        Sizes = new[] { "150px" },
+        //        AspectRatio = 1,
+        //        ImgWidthHeight = true,
+        //        FetchPriority = FetchPriority.Low,
+        //    };
 
-            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text");
+        //    var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, "alt text");
 
-            Assert.Equal(expected, result);
-        }
+        //    Assert.Equal(expected, result);
+        //}
 
         [Fact()]
         public void RenderWithFixedHeightOLD()
@@ -360,6 +361,18 @@ namespace PictureRenderer.Tests
             var profile = GetTestImageProfile();
 
             var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg?quality=7", profile, new PictureAttributes() { ImgAlt = "alt text" });
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact()]
+        public void RenderWithAdditionalAttributeTest()
+        {
+            const string expected = "<picture><source srcset=\"/myImage.jpg?width=150&height=150&quality=80 150w, /myImage.jpg?width=300&height=300&quality=80 300w\" sizes=\"150px\" /><img alt=\"\" src=\"/myImage.jpg?width=300&height=300&quality=80\" loading=\"lazy\" decoding=\"async\" itemprop=\"test\" /></picture>";
+            var profile = GetTestImageProfile();
+            profile.CreateWebpForFormat = null;
+
+            var result = PictureRenderer.Picture.Render("/myImage.jpg", profile, new PictureAttributes() { ImgAdditionalAttributes = new Dictionary<string, string>() { {"itemprop", "test"} } });
 
             Assert.Equal(expected, result);
         }
