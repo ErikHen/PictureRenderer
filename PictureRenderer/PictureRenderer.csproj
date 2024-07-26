@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.11</Version>
+    <Version>3.12</Version>
     <Authors>Erik Henningson</Authors>
     <Company />
     <Product />
@@ -12,7 +12,12 @@
     <PackageTags>Picture;element Responsive ImageSharp Storyblok Cloudflare Webp</PackageTags>
     <Description>Simplify rendering of HTML picture element. With support for responsive, lazy loaded images in the most optimal format. Works with Storyblok Image Service, Cloudflare Image Resizing, and ImageSharp (used by for example Umbraco CMS and Optimizely CMS).</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>PackageReadMe.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+	  <None Include="_Build\PackageReadMe.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
 
   <ItemGroup>

@@ -45,7 +45,7 @@ namespace PictureRenderer.Tests
             const string expected = "<picture><source srcset=\"https://mydomain.com/myImage.jpg/m/150x150 150w, https://mydomain.com/myImage.jpg/m/300x300 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"https://mydomain.com/myImage.jpg/m/300x300\" loading=\"lazy\" decoding=\"async\" /></picture>";
             var profile = GetTestImageProfile();
 
-            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, "alt text");
+            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, new PictureAttributes() { ImgAlt = "alt text" });
 
             Assert.Equal(expected, result);
         }
@@ -83,10 +83,8 @@ namespace PictureRenderer.Tests
 
         private static StoryblokProfile GetTestImageProfile()
         {
-            //use this to test with both single and multiple images
             return new StoryblokProfile()
             {
-                //MultiImageMediaConditions = new[] { new MediaCondition("(min-width: 1200px)", 400), new MediaCondition("(min-width: 600px)", 200), new MediaCondition("(min-width: 300px)", 100) },
                 SrcSetWidths = new[] { 150, 300 },
                 Sizes = new[] { "150px" },
                 AspectRatio = 1

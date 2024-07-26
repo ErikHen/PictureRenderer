@@ -32,7 +32,7 @@ namespace PictureRenderer.Tests
             const string expected = "<picture><source srcset=\"/cdn-cgi/image/width=150,format=auto,fit=crop,height=150/https://mydomain.com/myImage.jpg 150w, /cdn-cgi/image/width=300,format=auto,fit=crop,height=300/https://mydomain.com/myImage.jpg 300w\" sizes=\"150px\" /><img alt=\"alt text\" src=\"/cdn-cgi/image/width=300,format=auto,fit=crop,height=300/https://mydomain.com/myImage.jpg\" loading=\"lazy\" decoding=\"async\" /></picture>";
             var profile = GetTestImageProfile();
 
-            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, "alt text");
+            var result = PictureRenderer.Picture.Render("https://mydomain.com/myImage.jpg", profile, new PictureAttributes() { ImgAlt = "alt text" });
 
             Assert.Equal(expected, result);
         }
