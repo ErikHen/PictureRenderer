@@ -128,6 +128,8 @@ See also [sample projects](https://github.com/ErikHen/PictureRenderer.Samples).
 
 
 ## Version history
+* **4.0** Breaking changes: Use PictureAttributes object instead of individual parameters.<br> 
+Multi-image support is removed. It is better to have multiple picture elements. <br>
 * **3.12** Possible to set any attribute on the img element. Prepare for v4.
     > [!NOTE]
     > Switch to using a PictureAttributes object, instead of individual parameters, when calling `Picture.Render` . <br>
