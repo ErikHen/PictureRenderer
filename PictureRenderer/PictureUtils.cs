@@ -1,7 +1,6 @@
 ﻿using PictureRenderer.Profiles;
 using PictureRenderer.UrlBuilders;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -37,58 +36,6 @@ namespace PictureRenderer
 
             return pData;
         }
-
-        //public static MediaImagesPictureData GetMultiImagePictureData(string[] imagePaths, PictureProfileBase profile, string altText, (double x, double y)[] focalPoints, string cssClass)
-        //{
-        //    if (profile.MultiImageMediaConditions == null || !profile.MultiImageMediaConditions.Any())
-        //    {
-        //        throw new ArgumentException($"MultiImageMediaConditions must be defined in Picture profile when rendering multiple images.");
-        //    }
-
-        //    if (focalPoints == null)
-        //    {
-        //        focalPoints = Array.Empty<(double x, double y)>();
-        //    }
-        //    Uri fallbackImageUri = default;
-        //    (double x, double y) fallbackImageFocalPoint = default;
-        //    var numberOfImages = imagePaths.Length;
-        //    var numberOfFocalPoints = focalPoints.Length;
-        //    var mediaImagePaths = new List<MediaImagePaths>();
-        //    for (var i = 0; i < profile.MultiImageMediaConditions.Length; i++)
-        //    {
-        //        //If there isn't images for all media conditions, use last image in list.
-        //        var imageIndex = i >= numberOfImages ? numberOfImages - 1 : i;
-        //        var imagePath = imagePaths[imageIndex];
-        //        //Get focal point for this image (if there is one)
-        //        var imageFocalPoint = imageIndex >= numberOfFocalPoints ? default : focalPoints[imageIndex];
-
-        //        var imageUri = GetUriFromPath(imagePath);
-        //        mediaImagePaths.Add(new MediaImagePaths()
-        //        {
-        //            ImagePath = BuildImageUrl(imageUri, profile, profile.MultiImageMediaConditions[i].Width, null, imageFocalPoint),
-        //            ImagePathWebp = ShouldRenderWebp(profile, imageUri) ? BuildImageUrl(imageUri, profile, profile.MultiImageMediaConditions[i].Width, ImageFormat.Webp, imageFocalPoint) : string.Empty,
-        //            MediaCondition = profile.MultiImageMediaConditions[i].Media
-        //        });
-
-        //        if (i == 0)
-        //        {
-        //            //use first image as fallback image
-        //            fallbackImageUri = imageUri;
-        //            fallbackImageFocalPoint = imageFocalPoint;
-        //        }
-        //    }
-
-        //    var pData = new MediaImagesPictureData
-        //    {
-        //        MediaImages = mediaImagePaths,
-        //        AltText = altText,
-        //        ImgSrc = BuildImageUrl(fallbackImageUri, profile, profile.FallbackWidth, string.Empty, fallbackImageFocalPoint),
-        //        CssClass = cssClass,
-        //        UniqueId = profile.ShowInfo ? Guid.NewGuid().ToString("n").Substring(0, 10) : string.Empty
-        //    };
-
-        //    return pData;
-        //}
 
         private static string BuildImageUrl(Uri uri, PictureProfileBase profile, int imageWidth, string wantedFormat, (double x, double y) focalPoint)
         {
