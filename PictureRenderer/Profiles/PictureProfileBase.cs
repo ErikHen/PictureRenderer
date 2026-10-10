@@ -1,51 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿
 namespace PictureRenderer.Profiles
 {
     public abstract class PictureProfileBase
     {
-        private int _fallBackWidth;
-
         public int[] SrcSetWidths { get; set; }
         public string[] Sizes { get; set; }
-
-        /// <summary>
-        /// Use this when you want to show different images depending on media condition (for example different image for mobile sized screen and desktop sized screen).
-        /// </summary>
-        public MediaCondition[] MultiImageMediaConditions { get; set; }
 
         /// <summary>
         /// Default value is 80.
         /// </summary>
         public int? Quality { get; set; }
-
-
-
-        /// <summary>
-        /// Image width for browsers without support for picture element. Will use the largest image if not set.
-        /// </summary>
-        [Obsolete("Setting a custom value for FallbackWidth will not be possible in next major version.")]
-        public int FallbackWidth
-        {
-            get
-            {
-                if (_fallBackWidth == default && MultiImageMediaConditions != null)
-                {
-                    return MultiImageMediaConditions.OrderByDescending(mcw => mcw.Width).FirstOrDefault()?.Width ?? default;
-                }
-
-                if (_fallBackWidth == default && SrcSetWidths != null)
-                {
-                    return SrcSetWidths.Max();
-                }
-
-                return _fallBackWidth;
-
-            }
-            set => _fallBackWidth = value;
-        }
 
         /// <summary>
         /// The wanted aspect ratio of the image (width/height).
@@ -58,31 +22,11 @@ namespace PictureRenderer.Profiles
         /// </summary>
         public int? FixedHeight { get; set; }
 
-        /// <summary>
-        /// If true, width and height attributes will be rendered on the img element.
-        /// </summary>
-        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
-        public bool ImgWidthHeight { get; set; }
-
-        /// <summary>
-        /// Img element decoding attribute.
-        /// </summary>
-        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
-        public ImageDecoding ImageDecoding {get; set;}
-
-        /// <summary>
-        /// Img element fetchPriority attribute.
-        /// </summary>
-        [Obsolete("Use PictureAttributes object to set this value. Will be removed from profile in next major version.")]
-        public FetchPriority FetchPriority {get; set;}
-
         public bool ShowInfo { get; set; }
 
 
         protected PictureProfileBase()
         {
-
-            ImageDecoding = ImageDecoding.Async;
             ShowInfo = false;
         }
     }
